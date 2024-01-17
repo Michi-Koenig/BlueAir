@@ -1,0 +1,90 @@
+<html>
+
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Meine Webseite</title>
+        <script src="https://code.jquery.com/jquery-1.6.4.js"></script>
+        <style type="text/css">
+            
+            #menu{
+                display: inline;
+            }
+            
+        
+        </style>        
+        
+    </head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <body>
+        
+        
+        <nav id="menu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="rooms.html">Räume</a>
+            <a href="login.html">login</a>
+        </nav>
+        
+        <div id="zweiterAbschnitt">
+            <p id="green">Hier werden die ganzen räume angezeigt</p>
+        </div>
+        
+        
+        <script>
+
+            
+            $.getJSON('http://localhost:8024/ESP32/getData.php', function(data){
+                //console.log(data);
+                var display = `Raum: ${data.room}<br>
+                   Gerät: ${data.device}<br>
+                   Temperatur: ${data.temp}`
+                //$("display").html(display);
+
+                document.getElementById("test").innerHTML = `Raum: ${data.room} / Gerät: ${data.device}`;
+
+                const xValues = [7,8,9,10,11,12,13,14];
+                const yValues = data.temp;
+
+                new Chart("myChart", {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,0,255,1.0)",
+                    borderColor: "rgba(0,0,255,0.1)",
+                    data: yValues
+                    }]
+                },
+                options: {
+                    legend: {display: false},
+                    scales: {
+                    yAxes: [{ticks: {min: 20, max:30}}],
+                    }
+                }
+                });
+                
+
+
+            });
+
+            
+        </script>
+
+
+        <p id="test"></p>
+
+        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+
+
+
+
+
+
+
+        
+    </body>
+
+</html>
