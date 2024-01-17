@@ -33,17 +33,18 @@
         <script>
 
             
-            $.getJSON('http://localhost:8024/ESP32/getData.php', function(data){
+            $.getJSON('http://localhost/ESP32/getData.php', function(data){
                 //console.log(data);
                 var display = `Raum: ${data.room}<br>
                    Gerät: ${data.device}<br>
                    Temperatur: ${data.temp}`
                 //$("display").html(display);
-
-                document.getElementById("test").innerHTML = `Raum: ${data.room} / Gerät: ${data.device}`;
+                
+                document.getElementById("header").innerHTML = `Raum: ${data.projekt}`;
+                document.getElementById("test").innerHTML = `Raum: ${data.kueche} / Gerät: ${data.device}`;
 
                 const xValues = [7,8,9,10,11,12,13,14];
-                const yValues = data.temp;
+                const yValues = data.kueche;
 
                 new Chart("myChart", {
                 type: "line",
@@ -64,15 +65,13 @@
                     }
                 }
                 });
-                
-
 
             });
 
             
         </script>
 
-
+        <p id="header"></p>
         <p id="test"></p>
 
         <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
