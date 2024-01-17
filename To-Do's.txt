@@ -1,0 +1,2 @@
+- eine Überprüfung ob keine Leerzeichen in der URL vorhanden sind mit der die Daten an die Datenbank gesendet werden.
+- in der URL mmüssen die Strings mit anführungsschtrichen gesendet werden oder sie nachträglich angefügt werden um sie in die Datenbank zu schreiben.
