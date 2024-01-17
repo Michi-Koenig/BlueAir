@@ -1,2 +1,2 @@
-# BlueAir
+# BlueAirMonitor
 Monitoringsystem für Luftqualität
