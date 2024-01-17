@@ -1,4 +1,22 @@
 <?php
+$typOfTime = $_GET['typOfTime'];
+$timeperiod = $_GET['timeperiod'];
+$projekt = $_GET['projekt'];
+$room = $_GET['room'];
+$divice = $_GET['device'];
+
+
+try {
+    $connection = new mysqli('localhost', 'root', '', 'airmonitoring');
+  } catch (Exception $e) {
+    die('MySQL-Verbindung fehlgeschlagen: ' . $e->getMessage());
+  }
+
+$sql = "SELECT * FROM users WHERE created_at >= '2015-01-01 00:00:00' AND created_at <= '2015-12-31 23:59:49'";
+foreach ($pdo->query($sql) as $row) {
+   echo $row['vorname']." ".$row['nachname']."<br />";
+   echo "E-Mail: ".$row['email']."<br /><br />";
+}
 
 // Erstelle die Vriabeln
 $project = "Holderbaum";
@@ -26,22 +44,5 @@ $jsonObject = array(
 
 // Gib das JSON Objekt aus
 echo json_encode($jsonObject, JSON_PRETTY_PRINT);
-
-/*
-$array = array();
-$array['room'] = "Wohnen";
-$array['device'] = 1;
-$array['temp'] = array(); // unnötige Deklarierung aber zur lesbarkeit
-$array['temp'][] = 22;
-$array['temp'][] = 22;
-$array['temp'][] = 23;
-$array['temp'][] = 24;
-$array['temp'][] = 24;
-$array['temp'][] = 25;
-$array['temp'][] = 23;
-
-echo json_encode($array, JSON_PRETTY_PRINT);
-*/
-
 
 ?>
