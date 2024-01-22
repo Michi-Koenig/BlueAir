@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-1.6.4.js"></script>
+    <style>
+    
+    .charts {
+        background-color: white;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: left;
+        align-items: center;
+        gap: 16px;
+        max-width: auto;
+        margin: 0;
+        padding: 2%0px;
+    }
+    
+    </style>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<body>
+
+<script>
+
+    $.getJSON('http://localhost/ESP32/getData.php', function(data){
+
+        document.getElementById('project').innerText = data.project;
+        document.getElementById('room').innerText = data.room;
+
+        
+
+        const xValues = [1,2,3,4,5];
+        const tempValues = [18,19,19,20,20];
+
+        let countDevice = 1;
+        let countChart = 1;
+
+        var dataValues = data.data;
+        var xAxis;
+
+        for (let index1 = 0; index1 < data.devices; index1++) {
+        const div = document.createElement('div');
+        div.id = 'div' + countDevice;
+        
+
+            for (let index2 = 0; index2 < 4; index2++) {
+                const canvas = document.createElement('canvas');
+                canvas.id = 'chart' + countChart;
+                canvas.style = 'width: 40%; max-width: 700px';
+                div.appendChild(canvas);
+                
+                document.getElementById('charts').appendChild(div);
+                
+                xAxis = dataValues[countChart-1];
+                chartMin = Math.min(...dataValues[countChart-1])-2;
+                chartMax = Math.max(...dataValues[countChart-1])+2;
+
+                new Chart('chart' + countChart, {
+                type: 'line',
+                data: {
+                    labels: data.time,
+                    datasets: [{
+                    fill: false,
+                    lineTension: 0,
+                    backgroundColor: 'rgba(0, 0, 255, 1.0)',
+                    borderColor: 'rgba(0, 0, 255, 0.1)',
+                    data: xAxis
+                    }]
+                },
+                options: {
+                    legend: { display: true },
+                    scales: {
+                    yAxes: [{ ticks: { min: chartMin, max: chartMax } }]
+                    }
+                }
+                });
+
+                countChart++;
+            }
+        countDevice++;
+        }
+        
+    });
+        
+</script>
+
+<div class= "charts", id="charts">
+    <div>
+        <p id="project"></p>
+        <p id="room"></p>
+    </div>
+    
+</div>
+
+</body>
+</html>
