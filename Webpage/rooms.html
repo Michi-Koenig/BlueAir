@@ -86,68 +86,56 @@
         </div>
         
         
-        <div id="zweiterAbschnitt">
-            <p id="green">Hier werden die ganzen räume angezeigt</p>
-        </div>
-        
-        
         <script>
 
             
             $.getJSON('http://localhost/ESP32/getData.php', function(data){
-                //console.log(data);
-                var display = `Raum: ${data.room}<br>
-                   Gerät: ${data.device}<br>
-                   Temperatur: ${data.temp}`
-                //$("display").html(display);
-                
-                document.getElementById("header").innerHTML = `Objekt: ${data.project}`;
-                document.getElementById("test").innerHTML = `Raum: ${data.room} / Gerät: ${data.device}`;
 
-                const xValues = data.time;
-                const tempValues = data.temp;
-                const humValues = data.hum;
-                const presValues = data.pres;
-                const co2Values = data.co2;
+                const xValues = data['time'];
+                const tempValues = data['temp'];
+                const humValues = data['hum'];
+                const presValues = data['pres'];
+                const co2Values = data['co2'];
 
+            
                 new Chart("tempChart", {
-                type: "line",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                    fill: false,
-                    lineTension: 0,
-                    backgroundColor: "rgba(0,0,255,1.0)",
-                    borderColor: "rgba(0,0,255,0.1)",
-                    data: tempValues
-                    }]
-                },
-                options: {
-                    legend: {display: false},
-                    scales: {
-                    yAxes: [{ticks: {min: 15, max:25}}],
+                    type: "line",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(0,0,255,1.0)",
+                        borderColor: "rgba(0,0,255,0.1)",
+                        data: tempValues
+                        }]
+                    },
+                    options: {
+                        legend: {display: false},
+                        scales: {
+                        yAxes: [{ticks: {min: 15, max:25}}],
+                        }
                     }
-                }
                 });
 
                 new Chart("humChart", {
-                type: "line",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                    fill: false,
-                    lineTension: 0,
-                    backgroundColor: "rgba(0,0,255,1.0)",
-                    borderColor: "rgba(0,0,255,0.1)",
-                    data: humValues
-                    }]
-                },
-                options: {
-                    legend: {display: false},
-                    scales: {
-                    yAxes: [{ticks: {min: 40, max:60}}],
+                    type: "line",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(0,0,255,1.0)",
+                        borderColor: "rgba(0,0,255,0.1)",
+                        data: humValues
+                        }]
+                    },
+                    options: {
+                        legend: {display: false},
+                        scales: {
+                        yAxes: [{ticks: {min: 40, max:60}}],
+                        }
                     }
-                }
                 });
 
                 new Chart("presChart", {
@@ -188,22 +176,22 @@
                     yAxes: [{ticks: {min: 400, max:500}}],
                     }
                 }
-                });
+                }); 
 
             });
 
-            
         </script>
 
-        <p id="header"></p>
-        <p id="test"></p>
+        <div id="charts">
+            <p id="projekt"></p>
+            <p id="room"></p>
 
-        <canvas id="tempChart" style="width:100%;max-width:600px"></canvas>
-        <canvas id="humChart" style="width:100%;max-width:600px"></canvas>
-        <canvas id="presChart" style="width:100%;max-width:600px"></canvas>
-        <canvas id="co2Chart" style="width:100%;max-width:600px"></canvas>
+            <canvas id="tempChart" style="width:100%;max-width:600px"></canvas>
+            <canvas id="humChart" style="width:100%;max-width:600px"></canvas>
+            <canvas id="presChart" style="width:100%;max-width:600px"></canvas>
+            <canvas id="co2Chart" style="width:100%;max-width:600px"></canvas>
 
-
+        </div>
 
 
 
