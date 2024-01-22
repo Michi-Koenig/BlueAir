@@ -13,6 +13,7 @@ $devices = 2;
 
 // Erstelle die Arrays
 $arrayTime = array(1, 2, 3, 4, 5);
+
 $arrayTemp1 = array("19", "20", "20", "21", "19");
 $arrayHum1 = array("50", "51", "52", "51", "51");
 $arrayPres1 = array("965", "965", "963", "960", "961");
@@ -22,6 +23,7 @@ $arrayTemp2 = array("23", "22", "21", "21", "22");
 $arrayHum2 = array("45", "47", "47", "48", "49");
 $arrayPres2 = array("954", "956", "957", "958", "955");
 $arrayCo22 = array("490", "485", "480", "480", "478");
+$arrayData =array($arrayTemp1, $arrayHum1, $arrayPres1, $arrayCo21, $arrayTemp2, $arrayHum2, $arrayPres2, $arrayCo22);
 
 // Erstelle das JSON Objekt
 $jsonObject = array(
@@ -29,14 +31,7 @@ $jsonObject = array(
     "room" => $room,
     "devices" => $devices,
     "time" => $arrayTime,
-    "temp1" => $arrayTemp1,
-    "hum1" => $arrayHum1,
-    "pres1" => $arrayPres1,
-    "co21" => $arrayCo21,
-    "temp2" => $arrayTemp2,
-    "hum2" => $arrayHum2,
-    "pres2" => $arrayPres2,
-    "co22" => $arrayCo22
+    "data" => $arrayData
 );
 
 // Gib das JSON Objekt aus
