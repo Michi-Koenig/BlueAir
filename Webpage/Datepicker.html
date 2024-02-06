@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Standalone -->
+    <link href="dist/css/datepicker.min.css" rel="stylesheet" />
+    <!-- For Bootstrap 4 -->
+    <link href="dist/css/datepicker-bs4.min.css" rel="stylesheet" />
+    <!-- For Bulma -->
+    <link href="dist/css/datepicker-bulma.min.css" rel="stylesheet" />
+    <!-- For Foundation -->
+    <link href="dist/css/datepicker-foundation.min.css" rel="stylesheet" />
+</head>
+<body>
+    <script src="dist/js/datepicker-full.min.js"></script>
+
+    <div id="inline" data-date="01/05/2020"></div>
+
+    <input type="text" name="datepicker">
+
+    <div id="range">
+        <input type="text" name="start">
+        <span>To</span>
+        <input type="text" name="end">
+    </div>
+
+    <script>
+
+    const elem = document.querySelector('input[name="datepicker"]');
+    const datepicker = new Datepicker(elem, {
+      // Optionen hier
+     
+    });
+
+    elem.addEventListener('changeDate', (e, details) => {
+        const date = datepicker.dates[0];
+        const dateObj = new Date(+date).getTime()
+        console.log("Datum: " + dateObj)
+    })
+
+ 
+    </script>
+
+    <script>
+
+    </script>
+
+</body>
+</html>
