@@ -1,2 +1,7 @@
 - eine Überprüfung ob keine Leerzeichen in der URL vorhanden sind mit der die Daten an die Datenbank gesendet werden.
-- in der URL mmüssen die Strings mit anführungsschtrichen gesendet werden oder sie nachträglich angefügt werden um sie in die Datenbank zu schreiben.
+- in der URL müssen die Strings mit anführungsschtrichen gesendet werden oder sie nachträglich angefügt werden um sie in die Datenbank zu schreiben.
+
+PHP getData
+
+-Union select für bessere Performance. Die Verbindung muss nur einmal aufgebaut werden wenn mehrere SQL-Abfragen abgefragt werden müssen.
+-Sub select für bessere Performance. Gewisse Datensätze werden vorselectiert aus denen dann die Abfragen abgefragt werden.
