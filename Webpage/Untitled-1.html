@@ -4,17 +4,28 @@
     <script src="https://code.jquery.com/jquery-1.6.4.js"></script>
     <style>
     
+
     .charts {
         background-color: white;
-        display: flex;
-        flex-direction: row;
+        display:flex;
+        flex-direction: column;
         flex-wrap: wrap;
         justify-content: left;
         align-items: center;
         gap: 16px;
         max-width: auto;
         margin: 0;
-        padding: 2%0px;
+        padding: 20px;
+    }
+    .div{
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items:flex-start ;
+        gap: 16px;
+        max-width: 30%;
+        margin: 0;
+        padding: 20px;
     }
     
     </style>
@@ -42,13 +53,13 @@
 
         for (let index1 = 0; index1 < data.devices; index1++) {
         const div = document.createElement('div');
-        div.id = 'div' + countDevice;
+        div.className = 'div';
         
 
             for (let index2 = 0; index2 < 4; index2++) {
                 const canvas = document.createElement('canvas');
                 canvas.id = 'chart' + countChart;
-                canvas.style = 'width: 40%; max-width: 700px';
+                canvas.style = 'height: 100px; width: 200px; border: 1px solid black';
                 div.appendChild(canvas);
                 
                 document.getElementById('charts').appendChild(div);
@@ -86,11 +97,12 @@
         
 </script>
 
+<div>
+    <p id="project"></p>
+    <p id="room"></p>
+</div>
 <div class= "charts", id="charts">
-    <div>
-        <p id="project"></p>
-        <p id="room"></p>
-    </div>
+
     
 </div>
 
