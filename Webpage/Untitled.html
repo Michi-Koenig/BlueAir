@@ -4,18 +4,70 @@
     <script src="https://code.jquery.com/jquery-1.6.4.js"></script>
     <style>
     
+    body{
+        font-family: sans-serif;
+    }
+    p{
+        color: blueviolet;
+    }
+    .main{
+        background-color:rgb(255, 255, 255);
+        display: flex;
+        flex-direction: row;
+        padding: 5px;
+        gap: 5px;
+        height: auto;
+        min-height: 100%;
+    }
+    .rooms{
+        background-color: rgb(250, 250, 250);
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        padding: 10px;
+        border-right: 1px solid;
+        border-color: black;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
     .charts {
-        background-color: white;
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin: 0;
+        padding: 5px;
+    }
+    .canvasBox{
+        background-color: rgb(245, 244, 244);
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: left;
-        align-items: center;
-        gap: 16px;
-        max-width: auto;
-        margin: 0;
-        padding: 2%0px;
+        gap: 10px;
+        width: 100%;
+        height: auto;
     }
+    .canvasDiv{
+        width: 24%;
+        height: auto;
+        min-width: 250px;
+    }
+    .canvas{
+        width: 100%;
+        height: 100%;
+    }
+    button{
+        margin: 5px;
+        border: none;
+        background-color: unset;
+        text-align: left;
+    }
+    button:hover{
+        color: green;
+
+    }
+    
     
     </style>
 </head>
@@ -26,8 +78,8 @@
 
     $.getJSON('http://localhost:8024/ESP32/getData.php', function(data){
 
-        document.getElementById('project').innerText = data.project;
-        document.getElementById('room').innerText = data.room;
+        document.getElementById('project').innerText = "Projekt: "+data.project;
+        document.getElementById('room').innerText = "Raum: "+data.room;
 
         
 
@@ -41,17 +93,24 @@
         var xAxis;
 
         for (let index1 = 0; index1 < data.devices; index1++) {
-        const div = document.createElement('div');
-        div.id = 'div' + countDevice;
+            const divParent = document.createElement('div');
+            divParent.id = 'divParent' + countDevice;
+            divParent.className = 'canvasBox';
+
         
 
             for (let index2 = 0; index2 < 4; index2++) {
+                const divChild = document.createElement('div')
+                divChild.id = 'divChild' + countDevice;
+                divChild.className = 'canvasDiv';
+                divParent.appendChild(divChild);
+
                 const canvas = document.createElement('canvas');
                 canvas.id = 'chart' + countChart;
-                canvas.style = 'width: 40%; max-width: 700px';
-                div.appendChild(canvas);
+                canvas.className = 'canvas';
+                divChild.appendChild(canvas);
                 
-                document.getElementById('charts').appendChild(div);
+                document.getElementById('charts').appendChild(divParent);
                 
                 xAxis = dataValues[countChart-1];
                 chartMin = Math.min(...dataValues[countChart-1])-2;
@@ -86,12 +145,26 @@
         
 </script>
 
-<div class= "charts", id="charts">
-    <div>
-        <p id="project"></p>
-        <p id="room"></p>
+<div style=" background-color: rgba(202, 240, 255, 0.466);">
+    <p id="project"></p>
+    <p id="room"></p>
+</div>
+<hr>
+<div class=" main">
+
+    <div class=" rooms">
+        <p>Räume</p>
+        <button type="button">Schlafen</button>
+        <button type="button">Küche</button>
+        <button type="button">Büro</button>
+        <button type="button">Wohnen</button>
+        <button type="button">Badezimmer</button>
     </div>
     
+    <div class= "charts", id="charts">
+        
+        
+    </div>
 </div>
 
 </body>
