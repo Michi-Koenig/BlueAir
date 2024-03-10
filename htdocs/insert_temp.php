@@ -5,7 +5,7 @@ $pressure = $_GET['pressure'];
 $co2 = $_GET['co2'];
 $projekt = $_GET['projekt'];
 $room = $_GET['room'];
-$divice = $_GET['device'];
+$device = $_GET['device'];
 
 try {
   $connection = new mysqli('localhost', 'root', '', 'airmonitoring');
