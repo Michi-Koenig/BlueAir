@@ -1,6 +1,7 @@
 <?php
 // Datenbankvariablen
-$servername = "localhost";
+$project = $_GET['project'];
+$servername = "localhost:3306";
 $username = "root";
 $password = "";
 $dbname = "airmonitoring";
@@ -10,36 +11,39 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Überprüfe die Verbindung
 if ($conn->connect_error) {
-    die("Verbindung fehlgeschlagen: " . $conn->connect_error);
+  die("Verbindung fehlgeschlagen: " . $conn->connect_error);
 }
 
 // SQL-Abfrage mit DISTINCT
-$sql = "SELECT DISTINCT room FROM holderbaum";
-
-// Bereite die Abfrage vor
-$stmt = $conn->prepare($sql);
+$sql = "SELECT DISTINCT raum FROM " .$project;
 
 // Führe die Abfrage aus
-$stmt->execute();
+$result = $conn->query($sql);
 
-// Ergebnis in ein Array laden (ohne Duplikate)
-$rooms = array();
-$stmt->bind_result($room);
-while ($stmt->fetch()) {
-    $rooms[] = $room;
+// Ergebnisse in ein Array speichern
+if ($result->num_rows > 0) {
+
+  $resultArray = array();
+  while($row = $result->fetch_assoc()) {
+    $resultArray[] = $row['raum'];
+  }
+
+} else {
+  echo "0 Ergebnisse";
 }
 
-// Schließe die Verbindung
-$stmt->close();
+// Verbindung schließen
 $conn->close();
 
-// Ausgabe des Arrays
-//print_r($rooms);
-
+// Erzeuge das JSON Objekt
 $jsonObject = array(
-  "rooms" => $rooms
+  "rooms" => $resultArray
 );
 
-// Gib das JSON Objekt aus
+//Gib das JSON Objekt aus
 echo json_encode($jsonObject, JSON_PRETTY_PRINT);
 ?>
+
+
+  
+
