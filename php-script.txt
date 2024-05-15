@@ -1,0 +1,19 @@
+<?php
+// Ursprüngliches Array mit 24 Float-Werten
+$originalArray = [/* deine 24 Werte hier */];
+
+// Neues Array für die Durchschnittswerte
+$averageArray = [];
+
+// Schleife, die durch das ursprüngliche Array geht
+for ($i = 0; $i < count($originalArray); $i += 2) {
+    // Berechne den Durchschnitt der aktuellen beiden Werte
+    $average = ($originalArray[$i] + $originalArray[$i + 1]) / 2;
+    
+    // Füge den Durchschnittswert zum neuen Array hinzu
+    $averageArray[] = $average;
+}
+
+// Gib das neue Array aus
+print_r($averageArray);
+?>
