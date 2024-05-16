@@ -40,7 +40,7 @@ for ($i = 0; $i < 20000; $i++) {
     $hum = rand(35, 60); 
     $pres = rand(956, 987); 
     $co2 = rand(200, 600);
-    $room = "foyer";
+    $room = "schwimmbad";
     $device = 1;
 
     $sql = "INSERT INTO whiteHouse (zeitstempel, temp_value, hum_value, pres_value, co2_value, room, device) VALUES ('$zeitstempel', $temp, $hum, $pres, $co2, '$room', $device )";
