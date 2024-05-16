@@ -13,7 +13,7 @@ if ($conn->connect_error) {
   die("Verbindung fehlgeschlagen: " . $conn->connect_error);
 }
 
-// SQL-Abfrage mit DISTINCT
+// SQL-Abfrage wie viele Tabellen die Datenbank hat
 $sql = "SHOW TABLES";
 
 // Führe die Abfrage aus
@@ -42,7 +42,3 @@ $jsonObject = array(
 //Gib das JSON Objekt aus
 echo json_encode($jsonObject, JSON_PRETTY_PRINT);
 ?>
-
-
-  
-
