@@ -1,50 +1,16 @@
 <?php
 
-$typOfTime = "day";           //$_GET['typOfTime'];
-//$timeperiod =           //$_GET['timeperiod']; baumschulenweg holderbaum
-$project = "holderbaum";
-$room = "schlafen";
+$typOfTime = "day";             // $_GET['typOfTime'];
+$timeperiod = "2024-06-15";     // $_GET['timeperiod'];
+$project = $_GET['project'];
+$room = $_GET['room'];
 
-if ($typOfTime == "day"){
-    $arrayTime = array(0,2,4,6,8,10,12,14,16,18,20,22);
-    $arrayTemp1 = array("19", "20", "20", "21", "19", "21", "19", "20", "21", "19", "21", "19");
-    $arrayHum1 = array("50", "51", "52", "51", "51", "50", "51", "52", "51", "51", "50", "51");
-    $arrayPres1 = array("965", "965", "963", "960", "961", "965", "963", "963", "960", "961", "965", "963");
-    $arrayCo21 = array("450", "455", "454", "455", "455","450", "455", "454", "455", "455","450", "455");
-
-    $arrayTemp2 = array("23", "22", "21", "21", "22", "21", "22", "21", "21", "22", "21", "22");
-    $arrayHum2 = array("45", "47", "47", "48", "49", "47", "47", "47", "48", "49", "47", "47");
-    $arrayPres2 = array("954", "956", "957", "958", "955", "957", "958", "957", "958", "955", "957", "958");
-    $arrayCo22 = array("490", "485", "480", "480", "478", "485", "480", "480", "480", "478", "485", "480");
-}elseif($typOfTime == "week"){
-    $arrayTime = array("MO", "DI", "MI", "DO", "FR", "SA", "SO");
-    $arrayTemp1 = array("19", "20", "20", "21", "19", "21", "19");
-    $arrayHum1 = array("50", "51", "52", "51", "51", "50", "51");
-    $arrayPres1 = array("965", "965", "963", "960", "961", "965", "963");
-    $arrayCo21 = array("450", "455", "454", "455", "455","450", "455");
-
-    $arrayTemp2 = array("23", "22", "21", "21", "22", "21", "22");
-    $arrayHum2 = array("45", "47", "47", "48", "49", "47", "47");
-    $arrayPres2 = array("954", "956", "957", "958", "955", "957", "958");
-    $arrayCo22 = array("490", "485", "480", "480", "478", "485", "480");
-}elseif($typOfTime == "month"){
-    $arrayTime = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30);
-    $arrayTemp1 = array("19", "20", "20", "21", "19", "21", "19", "20", "21", "19", "21", "19", "19", "20", "20", "21", "19", "21", "19", "20", "21", "19", "21", "19", "21", "19", "21", "19", "19", "20");
-    $arrayHum1 = array("50", "51", "52", "51", "51", "50", "51", "52", "51", "51", "50", "51", "50", "51", "52", "51", "51", "50", "51", "52", "51", "51", "50", "51", "50", "51", "50", "51", "52", "51");
-    $arrayPres1 = array("965", "965", "963", "960", "961", "965", "963", "963", "960", "961", "965", "963", "965", "965", "963", "960", "961", "965", "963", "963", "960", "961", "965", "963", "960", "961", "965", "963", "963", "960");
-    $arrayCo21 = array("450", "455", "454", "455", "455","450", "455", "454", "455", "455","450", "455", "450", "455", "454", "455", "455","450", "455", "454", "455", "455","450", "455", "455", "455","450", "455", "454", "455");
-
-    $arrayTemp2 = array("19", "20", "20", "21", "19", "21", "19", "20", "21", "19", "21", "19", "19", "20", "20", "21", "19", "21", "19", "20", "21", "19", "21", "19", "21", "19", "21", "19", "19", "20");
-    $arrayHum2 = array("50", "51", "52", "51", "51", "50", "51", "52", "51", "51", "50", "51", "50", "51", "52", "51", "51", "50", "51", "52", "51", "51", "50", "51", "50", "51", "50", "51", "52", "51");
-    $arrayPres2 = array("965", "965", "963", "960", "961", "965", "963", "963", "960", "961", "965", "963", "965", "965", "963", "960", "961", "965", "963", "963", "960", "961", "965", "963", "960", "961", "965", "963", "963", "960");
-    $arrayCo22 = array("450", "455", "454", "455", "455","450", "455", "454", "455", "455","450", "455", "450", "455", "454", "455", "455","450", "455", "454", "455", "455","450", "455", "455", "455","450", "455", "454", "455");
-    // arrayTime muss für den Monat noch variabel gestalltet werden
-}
-
+// Zugangsdaten zum SQL-Datenbank
 $servername = "localhost:3306";
 $username = "root";
 $password = "";
 $dbname = "airmonitoring";
+
 // Erstelle eine Verbindung
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -53,23 +19,161 @@ if ($conn->connect_error) {
   die("Verbindung fehlgeschlagen: " . $conn->connect_error);
 }
 
-// SQL-Abfrage mit DISTINCT
-$sql = "SELECT DISTINCT geraet FROM " .$project;
+//__________________________________________________________________________________
+
+// SQL-Abfrage wie viele geräte befinden sich im Raum
+$sql = "SELECT DISTINCT device FROM " .$project . " WHERE room = '".$room."'";
 
 // Führe die Abfrage aus
-$result = $conn->query($sql);
+$resultdevice = $conn->query($sql);
 
-$devices = $result->num_rows; // SQL abfrage
-//echo $devices;
+// zählen wie viele Werte liefert das Ergebnis
+$devices = $resultdevice->num_rows;
 
+//__________________________________________________________________________________
 
-$devices = 2;
+$arrayData = array();
 
-// Erstelle die Arrays
-//$arrayTime = array(1,2,3,4,5);
+if ($typOfTime == "day"){
+    $arrayTime = array(0,2,4,6,8,10,12,14,16,18,20,22);
 
+    for ($i = 1; $i <= $devices; $i++) {
+    
+        // SQL-Abfrage Tag
+        $sql = "SELECT AVG(temp_value) as avg_temperature, AVG(hum_value) as avg_humidity, AVG(pres_value) as avg_pressure, AVG(co2_value) as avg_co2
+                FROM $project
+                WHERE DATE(zeitstempel) BETWEEN '$timeperiod' AND '$timeperiod' AND device = $i AND room = '$room'
+                GROUP BY HOUR(zeitstempel)";
+    
+        $resultday = $conn->query($sql);
 
-$arrayData =array($arrayTemp1, $arrayHum1, $arrayPres1, $arrayCo21, $arrayTemp2, $arrayHum2, $arrayPres2, $arrayCo22);
+        // erstellen der Arrays für die vier Charts
+        $arraytemp = array();
+        $arrayhum = array();
+        $arraypres = array();
+        $arrayco2 = array();
+
+        //Daten von jedem Datensatz in das jeweilige Array speichern
+        if ($resultday->num_rows > 0) {
+            
+            while($row = $resultday->fetch_assoc()) {
+                
+                array_push($arraytemp, number_format($row["avg_temperature"],1));
+                array_push($arrayhum, number_format($row["avg_humidity"]));
+                array_push($arraypres, number_format($row["avg_pressure"]));
+                array_push($arrayco2, number_format($row["avg_co2"]));
+
+            }
+        } else {
+            echo "Keine Ergebnisse";
+        }
+
+        // Mittelwert berechnen von 12 Stundenpaaren
+        $arraytempAVG = averageValue($arraytemp);
+        $arrayhumAVG = averageValue($arrayhum);
+        $arraypresAVG = averageValue($arraypres);
+        $arrayco2AVG = averageValue($arrayco2);
+
+        // Messwertarrays in arrayData zusammenfassen
+        array_push($arrayData, $arraytempAVG, $arrayhumAVG, $arraypresAVG, $arrayco2AVG);
+        
+    }
+
+}elseif($typOfTime == "week"){
+
+    $arrayTime = array("MO", "DI", "MI", "DO", "FR", "SA", "SO");
+
+    // Start- und Enddatum der Woche berechnen
+    $start_date = date('Y-m-d', strtotime('last Monday', strtotime($timeperiod)));
+    $end_date = date('Y-m-d', strtotime('next Sunday', strtotime($timeperiod)));
+
+    for ($i = 1; $i <= $devices; $i++) {
+    
+        // SQL-Abfrage für Woche
+        $sql = "SELECT AVG(temp_value) as avg_temperature, AVG(hum_value) as avg_humidity, AVG(pres_value) as avg_pressure, AVG(co2_value) as avg_co2
+                FROM $project
+                WHERE DATE(zeitstempel) BETWEEN '$start_date' AND '$end_date' AND device = $i AND room = '$room'
+                GROUP BY DAYOFWEEK(zeitstempel)";
+        
+        $resultweek = $conn->query($sql);
+
+        // erstellen der Arrays für die vier Charts
+        $arraytemp = array();
+        $arrayhum = array();
+        $arraypres = array();
+        $arrayco2 = array();
+
+        //Daten von jedem Datensatz in das jeweilige Array speichern
+        if ($resultweek->num_rows > 0) {
+           
+            while($row = $resultweek->fetch_assoc()) {
+                
+                array_push($arraytemp, number_format($row["avg_temperature"],1));
+                array_push($arrayhum, number_format($row["avg_humidity"]));
+                array_push($arraypres, number_format($row["avg_pressure"]));
+                array_push($arrayco2, number_format($row["avg_co2"]));
+
+            }
+        } else {
+            echo "Keine Ergebnisse";
+        }
+        // Messwertarrays in arrayData zusammenfassen
+        array_push($arrayData, $arraytemp, $arrayhum, $arraypres, $arrayco2);
+    }
+
+}elseif($typOfTime == "month"){
+
+    // ermitteln wie viele Tage der aktuelle Monat hat und das arrayTime fortlaufend befüllen
+    $numDays = date('t', strtotime($timeperiod));
+    $arrayTime = [];
+
+    for ($i = 1; $i <= $numDays; $i++) {
+        array_push($arrayTime, $i);
+    }
+
+    // das t anstatt das d gibt die Anzahl der Tage im Monat eines bestimmten Datums zurück
+    $start_date = date('Y-m-1', strtotime($timeperiod));
+    $end_date = date('Y-m-t', strtotime($timeperiod));
+    
+    for ($i = 1; $i <= $devices; $i++) {
+    
+        // SQL-Abfrage für Monat
+        $sql = "SELECT AVG(temp_value) as avg_temperature, AVG(hum_value) as avg_humidity, AVG(pres_value) as avg_pressure, AVG(co2_value) as avg_co2
+                FROM $project
+                WHERE DATE(zeitstempel) BETWEEN '$start_date' AND '$end_date' AND device = $i AND room = '$room'
+                GROUP BY DAY(zeitstempel)";
+        
+        $resultmonth = $conn->query($sql);
+
+        // erstellen der Arrays für die vier Charts
+        $arraytemp = array();
+        $arrayhum = array();
+        $arraypres = array();
+        $arrayco2 = array();
+
+        //Daten von jedem Datensatz in das jeweilige Array speichern
+        if ($resultmonth->num_rows > 0) {
+            
+            while($row = $resultmonth->fetch_assoc()) {
+                
+                array_push($arraytemp, number_format($row["avg_temperature"],1));
+                array_push($arrayhum, number_format($row["avg_humidity"]));
+                array_push($arraypres, number_format($row["avg_pressure"]));
+                array_push($arrayco2, number_format($row["avg_co2"]));
+
+            }
+        } else {
+            echo "Keine Ergebnisse";
+        }
+        // Messwertarrays in arrayData zusammenfassen
+        array_push($arrayData, $arraytemp, $arrayhum, $arraypres, $arrayco2);
+        
+    }
+
+}
+
+// Verbindung schließen
+$conn->close();
 
 // Erstelle das JSON Objekt
 $jsonObject = array(
@@ -82,5 +186,24 @@ $jsonObject = array(
 
 // Gib das JSON Objekt aus
 echo json_encode($jsonObject, JSON_PRETTY_PRINT);
+
+function averageValue($array){
+
+    // Neues Array für die Durchschnittswerte
+    $averageArray = [];
+
+    // Schleife, die durch das ursprüngliche Array geht
+    for ($i = 0; $i < count($array); $i += 2) {
+        // Berechne den Durchschnitt der aktuellen beiden Werte
+        $average = ($array[$i] + $array[$i + 1]) / 2;
+        
+        // Füge den Durchschnittswert zum neuen Array hinzu
+        array_push($averageArray, $average);
+        
+    }
+
+    return $averageArray;
+    
+}
 
 ?>
