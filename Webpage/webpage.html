@@ -115,7 +115,7 @@
 
     <script>
 
-        $.getJSON('http://localhost:8024/ESP32/getProject.php', function (projects) {
+        $.getJSON('http://localhost/ESP32/getProject.php', function (projects) {
 
             let array = projects.projects;
             console.log(array);
@@ -131,27 +131,11 @@
             getRooms();
         });
 
-
-        // $.getJSON('http://localhost:8024/ESP32/getRooms.php', function (rooms) {
-
-        //     let array = rooms.rooms;
-        //     console.log(array);
-
-        //     for (let index = 0; index < array.length; index++) {
-
-        //         const newButton = document.createElement('p');
-        //         newButton.textContent = array[index];
-        //         document.getElementById('rooms').appendChild(newButton);
-
-        //     }
-
-        // });
-
-
         function getRooms() {
 
             let selectElement = document.getElementById('selectProject').value;
-            let projectDatabase = "http://localhost:8024/ESP32/getRooms.php?project=" + selectElement;
+            let projectDatabase = "http://localhost/ESP32/getRooms.php?project=" + selectElement;
+            console.log(selectElement);
             console.log(projectDatabase);
 
             let chartdiv = document.getElementById("charts");
@@ -181,19 +165,17 @@
         function getData(room) {
 
             let selectElement = document.getElementById('selectProject').value;
-            let getDataPath = "http://localhost:8024/ESP32/getData.php?project=" + selectElement + "&room=" + room;
-            console.log(getDataPath);
+            let DataPath = "http://localhost/ESP32/getData.php?project=" + selectElement + "&room=" + room;
+            console.log(DataPath);
 
             let chartdiv = document.getElementById("charts");
             chartdiv.innerHTML = "";
 
-            $.getJSON(getDataPath, function (data) {
+            $.getJSON(DataPath, function (data) {
 
                 document.getElementById('project').innerText = "Projekt: " + data.project;
                 document.getElementById('room').innerText = "Raum: " + data.room;
 
-                //const xValues = [1,2,3,4,5];
-                //const tempValues = [18,19,19,20,20];
 
                 //let countDevice = 1;
                 let countChart = 1;
