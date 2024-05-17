@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Datepicker</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+</head>
+<body>
+
+<p>Datum: <input type="text" id="datepicker"></p>
+
+<script>
+$( function() {
+  $('#datepicker').datepicker({
+    showOtherMonths: true,
+    selectOtherMonths: true,
+    showButtonPanel: true,
+    firstDay: 1, // Woche beginnt am Montag
+    onSelect: function(dateText, inst) {
+      var date = $(this).datepicker('getDate'),
+          day  = date.getDate(),  
+          week = $.datepicker.iso8601Week(date),
+          month = date.getMonth() + 1;
+      alert('Tag: ' + day + '\nWoche: ' + week + '\nMonat: ' + month);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
