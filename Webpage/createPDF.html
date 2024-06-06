@@ -16,8 +16,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Scripte für Datepicker -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 
@@ -44,14 +42,14 @@
 
     <div id="pdfMenu">
 
-        Projekt: <select name="selectProject" id="selectProject" onchange="getRooms()"></select>
-        Raum: <select name="selectRoom" id="selectRoom" onchange="renderPDF()"></select>
-        Charttyp: <select name="typeOfTime" id="typeOfTime" onchange="renderPDF()">
+        Projekt: <select name="selectProject" id="selectProject" class="Dropdown" onchange="getRooms()"></select>
+        Raum: <select name="selectRoom" id="selectRoom" class="Dropdown" onchange="renderPDF()"></select>
+        Charttyp: <select name="typeOfTime" id="typeOfTime" class="Dropdown" onchange="renderPDF()">
             <option value="day">Tag</option>
             <option value="week">Woche</option>
             <option value="month">Monat</option>
         </select>
-        Datum: <input type="text" id="datepicker">
+        Datum: <input type="text" id="datepicker" class="Dropdown">
         <br /><br />
 
         <button id="createPDFButton" onclick="createPDF()">Download as PDF</button>
@@ -234,28 +232,18 @@
         async function createPDF() {
             const { jsPDF } = window.jspdf;
             let doc = new jsPDF();
-            //const project = document.getElementById('project').textContent;
-            //const room = document.getElementById('room').textContent;
-            //const typeOfTime = translateEN_DE(document.getElementById('typeOfTime').value);
-            //const date = document.getElementById('datepicker').value;
-
-            //doc.setFillColor(230, 223, 209);
-            //doc.rect(8, 8, 195, 40, 'F');
-            //doc.setFillColor(245, 244, 244);
-            //doc.rect(8, 50, 195, 250, 'F');
-            //doc.text(80, 20, "PDF-Ausdruck");
-            //doc.text(10, 30, project);
-            //doc.text(10, 40, room);
-            //doc.text(100, 30, 'Charttyp: ' + typeOfTime);
-            //doc.text(100, 40, 'Datum: ' + date);
+         
+            for(var i=0; i< numberOfDevices; i++) {
             // Warten Sie auf das aufgelöste Bild von createChartImg, mit der async funktion und dem await
-            const img = await createChartImg('divSite1');
+            const img = await createChartImg('divSite'+ (i+1));
             doc.addImage(img, 'png', 8, 8, 195, 280);
+
+            if (!i == numberOfDevices -1){
             doc.addPage();
-            const img2 = await createChartImg('divSite2');
-            doc.addImage(img, 'png', 8, 8, 195, 280);
-            //const img = await createChartImg('divSite2');
-            //doc.addImage(img, 'png', 10, 52, 191, 170);
+            }
+
+            }
+
             doc.save();
         }
 

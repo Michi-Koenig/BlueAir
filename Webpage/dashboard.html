@@ -4,28 +4,24 @@
 
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>Meine Webseite</title>
-        
-        <style type="text/css">
-            
-            #menu{
-                display: inline;
-            }
-            
-        
-        </style>        
-        
+        <title>BlueAirMonitor</title>
+             
+        <link rel="stylesheet" href="styles.css">
     </head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
     <body>
         
         
-        <nav id="menu">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="rooms.html">Räume</a>
-            <a href="createPDF.html">PDF erstellen</a>
-        </nav>
+        <div class="menu">
+
+            <nav id="menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="rooms.html">Räume</a>
+                <a href="createPDF.html">PDF erstellen</a>
+            </nav>
+    
+        </div>
 
 
         <canvas id="myChart" style="width:100%;max-width:600px"></canvas>

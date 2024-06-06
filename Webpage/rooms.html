@@ -33,13 +33,13 @@
 
     <div id="roomMenu">
 
-        Projekt: <select name="selectProject" id="selectProject" onchange="getRooms()"></select>
-        Charttyp: <select name="typeOfTime" id="typeOfTime" onchange="getRooms()">
+        Projekt: <select name="selectProject" id="selectProject" class="Dropdown" onchange="getRooms()"></select>
+        Charttyp: <select name="typeOfTime" id="typeOfTime" class="Dropdown" onchange="getRooms()">
             <option value="day">Tag</option>
             <option value="week">Woche</option>
             <option value="month">Monat</option>
         </select>
-        Datum: <input type="text" id="datepicker">
+        Datum: <input type="text" id="datepicker" class="Dropdown">
         <br/><br/>
         <span id="project"></span>
         <span id="room"></span>
@@ -136,7 +136,7 @@
                     for (let index2 = 0; index2 < 4; index2++) {
                         const divChild = document.createElement('div')
                         //divChild.id = 'divChild' + countDevice;
-                        divChild.className = 'canvasDiv';
+                        divChild.className = 'canvasDivRooms';
                         divParent.appendChild(divChild);
 
                         const canvas = document.createElement('canvas');

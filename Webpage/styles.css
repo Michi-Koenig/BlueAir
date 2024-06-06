@@ -54,6 +54,18 @@ p {
 
 #roomMenu {
     background-color: rgba(145, 115, 51, 0.226);
+    height: 80px;
+    padding: 10px;
+    text-align: center;
+    gap: 20px;
+    color: rgb(109, 74, 23);
+}
+
+#roomMenu span {
+    font-size: 200%;
+    color: rgb(109, 74, 23);
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .charts {
@@ -78,9 +90,9 @@ p {
 }
 
 .canvasDivRooms {
-    width: 23%;
+    width: 24%;
     height: auto;
-    min-width: 120px;
+    min-width: 400px;
 }
 
 .canvasDivPDF {
@@ -103,7 +115,6 @@ p {
     margin-bottom: 10px;
 }
 
-
 .pdfViewer {
     padding: 20px;
     gap: 15px;
@@ -115,6 +126,8 @@ p {
     padding: 10px;
     text-align: center;
     min-width: 820px;
+    height: 80px;
+    color: rgb(109, 74, 23);
 }
 
 .a4-container {
