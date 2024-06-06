@@ -1,0 +1,148 @@
+body {
+    font-family: sans-serif;
+}
+
+p {
+    color: rgb(59, 46, 30);
+}
+
+.menu a {
+    text-decoration: none;
+    color: rgb(78, 53, 16);
+    margin: 10px;
+    font-size: 25px;
+}
+
+#createPDFButton {
+    color: rgb(0, 0, 0);
+    background-color: beige;
+    font-size: 25px;
+    border-color: rgb(104, 72, 24);
+    border-radius: 8px;
+}
+
+.menu {
+    background-color: rgba(97, 67, 10, 0.466);
+    padding: 10px;
+    margin-bottom: 5px;
+    text-align: center;
+    min-width: 820px;
+}
+
+.main {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    gap: 5px;
+    height: auto;
+    min-height: 100%;
+}
+
+#rooms {
+    background-color: rgba(145, 115, 51, 0.226);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 10px;
+    border-right: 1px solid;
+    border-color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 15%;
+}
+
+#roomMenu {
+    background-color: rgba(145, 115, 51, 0.226);
+}
+
+.charts {
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0;
+    /* padding: 5px; */
+}
+
+.canvasBox {
+    background-color: rgb(245, 244, 244);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    height: auto;
+    padding: 10px;
+    margin: 5px;
+}
+
+.canvasDivRooms {
+    width: 23%;
+    height: auto;
+    min-width: 120px;
+}
+
+.canvasDivPDF {
+    width: 60%;
+    height: auto;
+    min-width: 400px;
+    margin: 5px;
+}
+
+.canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.pdfheader {
+    background-color: rgba(145, 115, 51, 0.226);
+    gap: 10px;
+    height: 80px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+
+.pdfViewer {
+    padding: 20px;
+    gap: 15px;
+    margin: 5px;
+}
+
+#pdfMenu {
+    background-color: rgba(145, 115, 51, 0.226);
+    padding: 10px;
+    text-align: center;
+    min-width: 820px;
+}
+
+.a4-container {
+    width: 794px;
+    height: 1123px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid black;
+    
+}
+.pdfInfoDiv{
+    display: flex;
+    gap: 200px;
+    padding: 20px;
+    margin: 0px;
+    background-color: rgba(145, 115, 51, 0.226);
+}
+
+button:hover {
+    color: green;
+}
+
+.roomSelect {
+    color: rgb(138, 92, 32);
+}
+
+.roomSelect:hover {
+    color: rgb(170, 133, 11);
+    font-size: 130%;
+    cursor: pointer;
+}

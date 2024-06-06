@@ -1,203 +1,235 @@
-<html>
+<!DOCTYPE html>
+<html lang="de">
 
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>Meine Webseite</title>
-        <script src="https://code.jquery.com/jquery-1.6.4.js"></script>
-        <style type="text/css">
-            
-            body{
-                margin: 0;
-                padding: 0;
-            }
+<head>
+    <title>BlueAirMonitor</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-            .navbar{
-                position: fixed;
-                background-color: rgba(255, 255, 255, 0.432);
-                height: 150px;
-                width: 100%;
-            }
-
-            nav ul{
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            nav {
-                text-align:center;
-            }
-
-            li{
-                display: inline;
-                margin: 10px;
-            }
-
-            nav a{
-                color: rgb(83, 132, 207);
-                text-decoration: none;
-                display: inline-block;
-                padding-top: 30px;
-                font-size: 40Px;
-            }
-            nav a:hover{
-                color: rgb(44, 21, 173);
-            }
-
-            nav a:active{
-                font-weight: bold;
-            }
-
-            img{
-                width: 150px;
-                padding: 15px;
-                float: left;
-            }
-
-            .zweiterAbschnitt{
-                position:relative;
-                left: 9px; top: 150px;
-                margin: auto;
-            }
-
-            *{
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            }
-                    
-        </style>        
-        
-    </head>
+    <!-- Script für Charts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
-    <body>
-        
-        <div class="navbar">
+    <!-- Scripte für Datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-            <img src="logo.jpg" alt="Logo">
+    <link rel="stylesheet" href="styles.css">
     
-            <nav>
-                <ul>
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="rooms.html">Räume</a></li>
-                    <li><a href="login.html">login</a></li>
-                </ul>
-            </nav>
-    
+</head>
+
+
+<body>
+
+    <div class="menu">
+
+        <nav id="menu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="rooms.html">Räume</a>
+            <a href="createPDF.html">PDF erstellen</a>
+        </nav>
+
+    </div>
+
+    <div id="roomMenu">
+
+        Projekt: <select name="selectProject" id="selectProject" onchange="getRooms()"></select>
+        Charttyp: <select name="typeOfTime" id="typeOfTime" onchange="getRooms()">
+            <option value="day">Tag</option>
+            <option value="week">Woche</option>
+            <option value="month">Monat</option>
+        </select>
+        Datum: <input type="text" id="datepicker">
+        <br/><br/>
+        <span id="project"></span>
+        <span id="room"></span>
+
+    </div>
+
+    <hr>
+
+    <div class=" main">
+
+        <div id="rooms">
+            <p>Räume</p>
         </div>
-        
-        
-        <script>
 
+        <div class="charts" , id="charts">
             
-            $.getJSON('http://localhost/ESP32/getData.php', function(data){
 
-                const xValues = data['time'];
-                const tempValues = data['temp'];
-                const humValues = data['hum'];
-                const presValues = data['pres'];
-                const co2Values = data['co2'];
+        </div>
+    </div>
 
-            
-                new Chart("tempChart", {
-                    type: "line",
-                    data: {
-                        labels: xValues,
-                        datasets: [{
-                        fill: false,
-                        lineTension: 0,
-                        backgroundColor: "rgba(0,0,255,1.0)",
-                        borderColor: "rgba(0,0,255,0.1)",
-                        data: tempValues
-                        }]
-                    },
-                    options: {
-                        legend: {display: false},
-                        scales: {
-                        yAxes: [{ticks: {min: 15, max:25}}],
-                        }
-                    }
-                });
+    <script>
 
-                new Chart("humChart", {
-                    type: "line",
-                    data: {
-                        labels: xValues,
-                        datasets: [{
-                        fill: false,
-                        lineTension: 0,
-                        backgroundColor: "rgba(0,0,255,1.0)",
-                        borderColor: "rgba(0,0,255,0.1)",
-                        data: humValues
-                        }]
-                    },
-                    options: {
-                        legend: {display: false},
-                        scales: {
-                        yAxes: [{ticks: {min: 40, max:60}}],
-                        }
-                    }
-                });
+        $.getJSON('http://localhost/ESP32/getProject.php', function (projects) {
 
-                new Chart("presChart", {
-                type: "line",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                    fill: false,
-                    lineTension: 0,
-                    backgroundColor: "rgba(0,0,255,1.0)",
-                    borderColor: "rgba(0,0,255,0.1)",
-                    data: presValues
-                    }]
-                },
-                options: {
-                    legend: {display: false},
-                    scales: {
-                    yAxes: [{ticks: {min: 930, max:980}}],
-                    }
+            let array = projects.projects;
+
+            let selectElement = document.getElementById('selectProject');
+
+            array.forEach(function (project) {
+                let el = document.createElement('option');
+                el.textContent = capitalizeString(project);
+                el.value = capitalizeString(project);;
+                selectElement.appendChild(el);
+            });
+            getRooms();
+        });
+
+        function getRooms() {
+
+            let selectProject = document.getElementById('selectProject').value;
+            let projectDatabase = "http://localhost/ESP32/getRooms.php?project=" + selectProject;
+
+            let chartdiv = document.getElementById("charts");
+            chartdiv.innerHTML = "";
+
+            $.getJSON(projectDatabase, function (rooms) {
+
+                let array = rooms.rooms;
+                let roomlist = document.getElementById('rooms');
+                roomlist.innerHTML = "<p>Räume</p>";
+
+                for (let index = 0; index < array.length; index++) {
+
+                    const newButton = document.createElement('p');
+                    newButton.textContent = capitalizeString(array[index]);
+                    newButton.id = array[index];
+                    newButton.onclick = function () { getData(array[index]) };
+                    newButton.className = "roomSelect";
+                    roomlist.appendChild(newButton);
+
                 }
-                });
+                document.getElementById(array[0]).click();
+            });
+        }
 
-                new Chart("co2Chart", {
-                type: "line",
-                data: {
-                    labels: xValues,
-                    datasets: [{
-                    fill: false,
-                    lineTension: 0,
-                    backgroundColor: "rgba(0,0,255,1.0)",
-                    borderColor: "rgba(0,0,255,0.1)",
-                    data: co2Values
-                    }]
-                },
-                options: {
-                    legend: {display: false},
-                    scales: {
-                    yAxes: [{ticks: {min: 400, max:500}}],
+        function getData(room) {
+
+            let selectElement = document.getElementById('selectProject').value;
+            let selectTypeOfTime = document.getElementById('typeOfTime').value;
+            let date = $('#datepicker').datepicker('getDate');
+            let dateString = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+            let DataPath = "http://localhost/ESP32/getData.php?project=" + selectElement + "&room=" + room + "&typeOfTime=" + selectTypeOfTime + "&timeperiod=" + dateString;
+
+            let chartdiv = document.getElementById("charts");
+            chartdiv.innerHTML = "";         
+
+            $.getJSON(DataPath, function (data) {
+
+                console.log(data.devices);
+                document.getElementById('project').innerText = "Projekt: " + data.project;
+                document.getElementById('room').innerText = "Raum: " + capitalizeString(data.room);
+
+                //let countDevice = 1;
+                let countChart = 1;
+
+                var dataValues = data.data;
+                var xAxis;
+
+                for (let index1 = 0; index1 < data.devices; index1++) {
+                    const divParent = document.createElement('div');
+                    //divParent.id = 'divParent' + countDevice;
+                    divParent.className = 'canvasBox';
+
+                    for (let index2 = 0; index2 < 4; index2++) {
+                        const divChild = document.createElement('div')
+                        //divChild.id = 'divChild' + countDevice;
+                        divChild.className = 'canvasDiv';
+                        divParent.appendChild(divChild);
+
+                        const canvas = document.createElement('canvas');
+                        canvas.id = 'chart' + countChart;
+                        canvas.className = 'canvas';
+                        divChild.appendChild(canvas);
+
+                        document.getElementById('charts').appendChild(divParent);
+
+                        xAxis = dataValues[countChart - 1];
+
+                        let chartMin = minValue(dataValues[countChart - 1]);
+                        let chartMax = maxValue(dataValues[countChart - 1]);
+                    
+                        new Chart('chart' + countChart, {
+                            type: 'line',
+                            data: {
+                                labels: data.time,
+                                datasets: [{
+                                    fill: false,
+                                    lineTension: 0,
+                                    backgroundColor: 'rgba(138, 92, 32, 1.0)',
+                                    borderColor: 'rgba(0, 0, 255, 0.1)',
+                                    data: xAxis
+                                }]
+                            },
+                            options: {
+                                legend: { display: true },
+                                scales: {
+                                    yAxes: [{ ticks: { min: chartMin, max: chartMax } }]
+                                }
+                            }
+                        });
+
+                        countChart++;
                     }
+                    //countDevice++;
                 }
-                }); 
 
             });
 
-        </script>
+        }
 
-        <div id="charts">
-            <p id="projekt"></p>
-            <p id="room"></p>
+        function minValue(array) {
 
-            <canvas id="tempChart" style="width:100%;max-width:600px"></canvas>
-            <canvas id="humChart" style="width:100%;max-width:600px"></canvas>
-            <canvas id="presChart" style="width:100%;max-width:600px"></canvas>
-            <canvas id="co2Chart" style="width:100%;max-width:600px"></canvas>
+            // erstellt ein neues Array wo alle null-Werte aussortiert. Der Filter-Methode wird eine funktion übergeben deren bedingung erfüllt werden muss.
+            const filterdArray = array.filter(sort => sort !== null);
 
-        </div>
+            let chartMin = Math.min(...filterdArray) - 1;
+            return chartMin;
 
+        }
 
+        function maxValue(array) {
 
+            let chartMax = Math.max(...array) + 1;
+            return chartMax;
 
+        }
 
+        function createPDF() {
+            // get the element of ticket content.
+            const docElement = document.getElementById('charts');
+            // select the element and save as the PDF.
+            html2pdf().from(docElement).save();
+        }
+
+        $(function () {
+            $('#datepicker').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                showButtonPanel: true,
+                dateFormat: 'dd-mm-yy',
+                firstDay: 1, // Woche beginnt am Montag
+                onSelect: function (dateText, inst) {
+                    var date = $(this).datepicker('getDate');
+                    console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+                    getRooms();
+                }
+
+            })
+            // beim ersten öffnen der Seite wird das heutige Datum selectiert
+            $('#datepicker').datepicker('setDate', new Date());
+            var date = $('#datepicker').datepicker('getDate');
         
-    </body>
+        });
+
+        function capitalizeString(string) {
+            return string[0].toUpperCase() + string.slice(1);
+        }
+
+    </script>
+
+</body>
 
 </html>

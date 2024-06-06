@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueAirMonitor</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Script für Charts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <!-- Script für json anfrage und Datepicker-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Scripte für Datepicker -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
+    <!-- Scripte für die erstellung von PDF´s -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+
+<body>
+
+    <div class="menu">
+
+        <nav id="menu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="rooms.html">Räume</a>
+            <a href="createPDF.html">PDF erstellen</a>
+        </nav>
+
+    </div>
+
+    <div id="pdfMenu">
+
+        Projekt: <select name="selectProject" id="selectProject" onchange="getRooms()"></select>
+        Raum: <select name="selectRoom" id="selectRoom" onchange="renderPDF()"></select>
+        Charttyp: <select name="typeOfTime" id="typeOfTime" onchange="renderPDF()">
+            <option value="day">Tag</option>
+            <option value="week">Woche</option>
+            <option value="month">Monat</option>
+        </select>
+        Datum: <input type="text" id="datepicker">
+        <br /><br />
+
+        <button id="createPDFButton" onclick="createPDF()">Download as PDF</button>
+    </div>
+
+    <hr>
+
+    <div class="pdfViewer" , id="pdfViewer">
+
+        <div class="charts" , id="charts">
+
+
+        </div>
+    </div>
+
+    <script>
+
+        let numberOfDevices; // wird von der funktion renderPDF überschrieben und in der funktion createPDF verwendet
+
+        $.getJSON('http://localhost/ESP32/getProject.php', function (projects) {
+
+            let array = projects.projects;
+
+            let selectElement = document.getElementById('selectProject');
+
+            array.forEach(function (project) {
+                let el = document.createElement('option');
+                el.textContent = capitalizeString(project);
+                el.value = capitalizeString(project);
+                selectElement.appendChild(el);
+            });
+            getRooms();
+
+        });
+
+        function getRooms() {
+
+            let selectProject = document.getElementById('selectProject').value;
+            let projectDatabase = "http://localhost/ESP32/getRooms.php?project=" + selectProject;
+
+            // löscht die optionen des selectelements um es neu befüllen zu können
+            let element = document.getElementById('selectRoom');
+            let length = element.options.length;
+            for (let i = 0; i < length; i++) {
+                element.remove(0);
+            }
+
+            $.getJSON(projectDatabase, function (rooms) {
+
+                array = rooms.rooms;
+
+                let selectElement = document.getElementById('selectRoom');
+
+                array.forEach(function (room) {
+                    let el = document.createElement('option');
+                    el.textContent = capitalizeString(room);
+                    el.value = capitalizeString(room);
+                    selectElement.appendChild(el);
+                });
+                renderPDF();
+            });
+        }
+
+        function renderPDF() {
+
+            let selectProject = document.getElementById('selectProject').value;
+            let selectRoom = document.getElementById('selectRoom').value;
+            let selectTypeOfTime = document.getElementById('typeOfTime').value;
+            let date = $('#datepicker').datepicker('getDate');
+            let dateString = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+            let DataPath = "http://localhost/ESP32/getData.php?project=" + selectProject + "&room=" + selectRoom + "&typeOfTime=" + selectTypeOfTime + "&timeperiod=" + dateString;
+
+            let chartdiv = document.getElementById("charts");
+            chartdiv.innerHTML = "";
+
+            $.getJSON(DataPath, function (data) {
+
+                numberOfDevices = data.devices;
+                console.log(numberOfDevices);
+                console.log(data);
+                let countDevice = 1;
+                let countChart = 1;
+
+                var dataValues = data.data;
+                var xAxis;
+
+                for (let index1 = 0; index1 < data.devices; index1++) {
+                    const divSite = document.createElement('div');
+                    divSite.id = 'divSite'+ countDevice;
+                    divSite.className = 'a4-container';
+
+
+                    const typeOfTime = translateEN_DE(document.getElementById('typeOfTime').value);
+                    const date = document.getElementById('datepicker').value;
+
+                    const pdfInfoDiv = document.createElement('div');
+                    pdfInfoDiv.id = 'pdfInfoDiv' + countDevice;
+                    pdfInfoDiv.className = 'pdfInfoDiv'
+                    divSite.appendChild(pdfInfoDiv);
+
+                    const pdfInfo1 = document.createElement('p');
+                    pdfInfo1.id = 'pdfInfo1-' + countDevice;
+                    pdfInfo1.className = 'pdfInfo1'
+                    pdfInfo1.innerHTML = 
+                    "Projekt: " + data.project + '<br>'+
+                    "Raum: " + data.room + '<br>'+
+                    "Gerät: " + (index1+1)
+                    pdfInfoDiv.appendChild(pdfInfo1);
+
+                    const pdfInfo2 = document.createElement('p');
+                    pdfInfo2.id = 'pdfInfo2-' + countDevice;
+                    pdfInfo2.className = 'pdfInfo2'
+                    pdfInfo2.innerHTML = 
+                    "Charttyp: " + typeOfTime + '<br>'+
+                    "Datum: " + date;
+                    pdfInfoDiv.appendChild(pdfInfo2);
+
+                    for (let index2 = 0; index2 < 4; index2++) {
+                        const divChild = document.createElement('div')
+                        divChild.id = 'divChild' + countChart;
+                        divChild.className = 'canvasDivPDF';
+                        divSite.appendChild(divChild);
+                        
+
+                        const canvas = document.createElement('canvas');
+                        canvas.id = 'chart' + countChart;
+                        canvas.className = 'canvas';
+                        divChild.appendChild(canvas);
+
+                        
+                        document.getElementById('charts').appendChild(divSite);
+                        
+                        xAxis = dataValues[countChart - 1];
+
+                        let chartMin = minValue(dataValues[countChart - 1]);
+                        let chartMax = maxValue(dataValues[countChart - 1]);
+
+                        new Chart('chart' + countChart, {
+                            type: 'line',
+                            data: {
+                                labels: data.time,
+                                datasets: [{
+                                    fill: false,
+                                    lineTension: 0,
+                                    backgroundColor: 'rgba(138, 92, 32, 1.0)',
+                                    borderColor: 'rgba(0, 0, 255, 0.1)',
+                                    data: xAxis
+                                }]
+                            },
+                            options: {
+                                legend: { display: true },
+                                scales: {
+                                    yAxes: [{ ticks: { min: chartMin, max: chartMax } }]
+                                }
+                            }
+                        });
+
+                        countChart++;
+                    }
+                    countDevice++;
+                }
+
+            });
+
+        }
+
+        function createChartImg(element) {
+            return new Promise((resolve, reject) => { // erzeuge ein Promise
+                html2canvas(document.getElementById(element))
+                    .then(canvas => {
+                        const imageData = canvas.toDataURL("image/png");
+                        const image = new Image();
+                        image.src = imageData;
+                        resolve(image); // Einlösen des Promise mit dem Bildobjekt
+                    })
+                    .catch(error => reject(error)); // potentielle Fehler behandeln
+            });
+        }
+
+        async function createPDF() {
+            const { jsPDF } = window.jspdf;
+            let doc = new jsPDF();
+            //const project = document.getElementById('project').textContent;
+            //const room = document.getElementById('room').textContent;
+            //const typeOfTime = translateEN_DE(document.getElementById('typeOfTime').value);
+            //const date = document.getElementById('datepicker').value;
+
+            //doc.setFillColor(230, 223, 209);
+            //doc.rect(8, 8, 195, 40, 'F');
+            //doc.setFillColor(245, 244, 244);
+            //doc.rect(8, 50, 195, 250, 'F');
+            //doc.text(80, 20, "PDF-Ausdruck");
+            //doc.text(10, 30, project);
+            //doc.text(10, 40, room);
+            //doc.text(100, 30, 'Charttyp: ' + typeOfTime);
+            //doc.text(100, 40, 'Datum: ' + date);
+            // Warten Sie auf das aufgelöste Bild von createChartImg, mit der async funktion und dem await
+            const img = await createChartImg('divSite1');
+            doc.addImage(img, 'png', 8, 8, 195, 280);
+            doc.addPage();
+            const img2 = await createChartImg('divSite2');
+            doc.addImage(img, 'png', 8, 8, 195, 280);
+            //const img = await createChartImg('divSite2');
+            //doc.addImage(img, 'png', 10, 52, 191, 170);
+            doc.save();
+        }
+
+        function translateEN_DE(string) {
+            let stringTranslated;
+            if (string == 'day') {
+                stringTranslated = 'Tag';
+            } else if (string == 'week') {
+                stringTranslated = 'Woche';
+            } else if (string == 'month') {
+                stringTranslated = 'Monat';
+            }
+
+            return stringTranslated;
+
+        }
+
+        function minValue(array) {
+
+            // erstellt ein neues Array wo alle null-Werte aussortiert. Der Filter-Methode wird eine funktion übergeben deren bedingung erfüllt werden muss.
+            const filterdArray = array.filter(sort => sort !== null);
+
+            let chartMin = Math.min(...filterdArray) - 1;
+            return chartMin;
+
+        }
+
+        function maxValue(array) {
+
+            let chartMax = Math.max(...array) + 1;
+            return chartMax;
+
+        }
+
+        $(function () {
+            $('#datepicker').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                showButtonPanel: true,
+                dateFormat: 'dd-mm-yy',
+                firstDay: 1, // Woche beginnt am Montag
+                onSelect: function (dateText, inst) {
+                    var date = $(this).datepicker('getDate');
+                    console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+                    getRooms();
+                }
+
+            })
+            // beim ersten öffnen der Seite wird das heutige Datum selectiert
+            $('#datepicker').datepicker('setDate', new Date());
+            var date = $('#datepicker').datepicker('getDate');
+
+        });
+
+        function capitalizeString(string) {
+            return string[0].toUpperCase() + string.slice(1);
+        }
+    </script>
+</body>
+
+</html>
