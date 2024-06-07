@@ -1,7 +1,7 @@
 <?php
 
-$typOfTime = "day";             // $_GET['typOfTime'];
-$timeperiod = "2024-06-15";     // $_GET['timeperiod'];
+$typOfTime = $_GET['typeOfTime'];
+$timeperiod = $_GET['timeperiod'];
 $project = $_GET['project'];
 $room = $_GET['room'];
 
@@ -40,11 +40,11 @@ if ($typOfTime == "day"){
     for ($i = 1; $i <= $devices; $i++) {
     
         // SQL-Abfrage Tag
-        $sql = "SELECT AVG(temp_value) as avg_temperature, AVG(hum_value) as avg_humidity, AVG(pres_value) as avg_pressure, AVG(co2_value) as avg_co2
+        $sql = "SELECT HOUR(zeitstempel) as Hour, AVG(temp_value) as avg_temperature, AVG(hum_value) as avg_humidity, AVG(pres_value) as avg_pressure, AVG(co2_value) as avg_co2
                 FROM $project
                 WHERE DATE(zeitstempel) BETWEEN '$timeperiod' AND '$timeperiod' AND device = $i AND room = '$room'
                 GROUP BY HOUR(zeitstempel)";
-    
+        
         $resultday = $conn->query($sql);
 
         // erstellen der Arrays für die vier Charts
@@ -52,20 +52,25 @@ if ($typOfTime == "day"){
         $arrayhum = array();
         $arraypres = array();
         $arrayco2 = array();
+        
+        for ($j = 1; $j <= 12; $j++) {
+            array_push($arraytemp, 0);
+            array_push($arrayhum, 0);
+            array_push($arraypres, 0);
+            array_push($arrayco2, 0);
+        }
 
         //Daten von jedem Datensatz in das jeweilige Array speichern
         if ($resultday->num_rows > 0) {
             
             while($row = $resultday->fetch_assoc()) {
-                
-                array_push($arraytemp, number_format($row["avg_temperature"],1));
-                array_push($arrayhum, number_format($row["avg_humidity"]));
-                array_push($arraypres, number_format($row["avg_pressure"]));
-                array_push($arrayco2, number_format($row["avg_co2"]));
+
+                $arraytemp[$row["Hour"]] = number_format($row["avg_temperature"],1);
+                $arrayhum[$row["Hour"]] = number_format($row["avg_humidity"]);
+                $arraypres[$row["Hour"]] = number_format($row["avg_pressure"]);
+                $arrayco2[$row["Hour"]] = number_format($row["avg_co2"]);
 
             }
-        } else {
-            echo "Keine Ergebnisse";
         }
 
         // Mittelwert berechnen von 12 Stundenpaaren
@@ -88,13 +93,13 @@ if ($typOfTime == "day"){
     $end_date = date('Y-m-d', strtotime('next Sunday', strtotime($timeperiod)));
 
     for ($i = 1; $i <= $devices; $i++) {
-    
+        
         // SQL-Abfrage für Woche
-        $sql = "SELECT AVG(temp_value) as avg_temperature, AVG(hum_value) as avg_humidity, AVG(pres_value) as avg_pressure, AVG(co2_value) as avg_co2
+        $sql = "SELECT weekday(zeitstempel) as weekday, AVG(temp_value) as avg_temperature, AVG(hum_value) as avg_humidity, AVG(pres_value) as avg_pressure, AVG(co2_value) as avg_co2
                 FROM $project
                 WHERE DATE(zeitstempel) BETWEEN '$start_date' AND '$end_date' AND device = $i AND room = '$room'
                 GROUP BY DAYOFWEEK(zeitstempel)";
-        
+            
         $resultweek = $conn->query($sql);
 
         // erstellen der Arrays für die vier Charts
@@ -103,20 +108,27 @@ if ($typOfTime == "day"){
         $arraypres = array();
         $arrayco2 = array();
 
+        // erstellen der Arrays für die vier Charts
+        for ($j = 1; $j <= 7; $j++) {
+            array_push($arraytemp, 0);
+            array_push($arrayhum, 0);
+            array_push($arraypres, 0);
+            array_push($arrayco2, 0);
+        }
+
         //Daten von jedem Datensatz in das jeweilige Array speichern
         if ($resultweek->num_rows > 0) {
            
             while($row = $resultweek->fetch_assoc()) {
-                
-                array_push($arraytemp, number_format($row["avg_temperature"],1));
-                array_push($arrayhum, number_format($row["avg_humidity"]));
-                array_push($arraypres, number_format($row["avg_pressure"]));
-                array_push($arrayco2, number_format($row["avg_co2"]));
+
+                $arraytemp[$row["weekday"]] = number_format($row["avg_temperature"],1);
+                $arrayhum[$row["weekday"]] = number_format($row["avg_humidity"]);
+                $arraypres[$row["weekday"]] = number_format($row["avg_pressure"]);
+                $arrayco2[$row["weekday"]] = number_format($row["avg_co2"]);
 
             }
-        } else {
-            echo "Keine Ergebnisse";
         }
+
         // Messwertarrays in arrayData zusammenfassen
         array_push($arrayData, $arraytemp, $arrayhum, $arraypres, $arrayco2);
     }
@@ -138,7 +150,7 @@ if ($typOfTime == "day"){
     for ($i = 1; $i <= $devices; $i++) {
     
         // SQL-Abfrage für Monat
-        $sql = "SELECT AVG(temp_value) as avg_temperature, AVG(hum_value) as avg_humidity, AVG(pres_value) as avg_pressure, AVG(co2_value) as avg_co2
+        $sql = "SELECT DAY(zeitstempel) as day, AVG(temp_value) as avg_temperature, AVG(hum_value) as avg_humidity, AVG(pres_value) as avg_pressure, AVG(co2_value) as avg_co2
                 FROM $project
                 WHERE DATE(zeitstempel) BETWEEN '$start_date' AND '$end_date' AND device = $i AND room = '$room'
                 GROUP BY DAY(zeitstempel)";
@@ -151,20 +163,27 @@ if ($typOfTime == "day"){
         $arraypres = array();
         $arrayco2 = array();
 
+        // erstellen der Arrays für die vier Charts
+        for ($j = 1; $j <= $numDays; $j++) {
+            array_push($arraytemp, null);
+            array_push($arrayhum, null);
+            array_push($arraypres, null);
+            array_push($arrayco2, null);
+        }
+        
+
         //Daten von jedem Datensatz in das jeweilige Array speichern
         if ($resultmonth->num_rows > 0) {
             
             while($row = $resultmonth->fetch_assoc()) {
                 
-                array_push($arraytemp, number_format($row["avg_temperature"],1));
-                array_push($arrayhum, number_format($row["avg_humidity"]));
-                array_push($arraypres, number_format($row["avg_pressure"]));
-                array_push($arrayco2, number_format($row["avg_co2"]));
-
+                $arraytemp[$row["day"]] = number_format($row["avg_temperature"],1);
+                $arrayhum[$row["day"]] = number_format($row["avg_humidity"]);
+                $arraypres[$row["day"]] = number_format($row["avg_pressure"]);
+                $arrayco2[$row["day"]] = number_format($row["avg_co2"]);
             }
-        } else {
-            echo "Keine Ergebnisse";
         }
+
         // Messwertarrays in arrayData zusammenfassen
         array_push($arrayData, $arraytemp, $arrayhum, $arraypres, $arrayco2);
         

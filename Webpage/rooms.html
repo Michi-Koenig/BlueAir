@@ -21,7 +21,7 @@
 
 <body>
 
-    <div class="menu">
+    <div class="Mainmenu">
 
         <nav id="menu">
             <a href="dashboard.html">Dashboard</a>
@@ -31,7 +31,7 @@
 
     </div>
 
-    <div id="roomMenu">
+    <div class="SitemenuRooms">
 
         Projekt: <select name="selectProject" id="selectProject" class="Dropdown" onchange="getRooms()"></select>
         Charttyp: <select name="typeOfTime" id="typeOfTime" class="Dropdown" onchange="getRooms()">
@@ -48,7 +48,7 @@
 
     <hr>
 
-    <div class=" main">
+    <div class="Rooms">
 
         <div id="rooms">
             <p>Räume</p>
@@ -71,7 +71,7 @@
             array.forEach(function (project) {
                 let el = document.createElement('option');
                 el.textContent = capitalizeString(project);
-                el.value = capitalizeString(project);;
+                el.value = capitalizeString(project);
                 selectElement.appendChild(el);
             });
             getRooms();

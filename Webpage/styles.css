@@ -6,7 +6,7 @@ p {
     color: rgb(59, 46, 30);
 }
 
-.menu a {
+.Mainmenu a {
     text-decoration: none;
     color: rgb(78, 53, 16);
     margin: 10px;
@@ -21,7 +21,7 @@ p {
     border-radius: 8px;
 }
 
-.menu {
+.Mainmenu {
     background-color: rgba(97, 67, 10, 0.466);
     padding: 10px;
     margin-bottom: 5px;
@@ -29,7 +29,7 @@ p {
     min-width: 820px;
 }
 
-.main {
+.Rooms {
     background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: row;
@@ -37,6 +37,7 @@ p {
     gap: 5px;
     height: auto;
     min-height: 100%;
+    min-width: 820px;
 }
 
 #rooms {
@@ -52,16 +53,43 @@ p {
     width: 15%;
 }
 
-#roomMenu {
+.SitemenuRooms, .SitemenuPDF {
     background-color: rgba(145, 115, 51, 0.226);
-    height: 80px;
     padding: 10px;
     text-align: center;
-    gap: 20px;
-    color: rgb(109, 74, 23);
+    min-width: 820px;
+    height: 80px;
+    color: rgb(109, 74, 23)
 }
 
-#roomMenu span {
+.SitemenuDashboard {
+    display: grid;
+    grid-template-columns: 0.9fr 0.4fr 1fr 0.4fr 0.8fr 0.4fr 0.6fr 0.4fr;
+    /* Erstellt 3 Spalten */
+    grid-template-rows: repeat(2, auto);
+    /* Erstellt 4 Zeilen */
+    gap: 10px;
+    /* Setzt den Abstand zwischen den Grid-Items */
+    padding: 10px;
+    background-color: rgba(145, 115, 51, 0.226);
+    padding: 10px;
+    min-width: 820px;
+    height: 80px;
+    color: rgb(109, 74, 23)
+}
+
+.SitemenuDashboard label {
+    margin: 5px;
+}
+
+.SitemenuDashboard input {
+    max-width: 45px !important;
+    max-height: 20px !important;
+    margin: 5px !important;
+    border-radius: 4px;
+}
+
+.SitemenuRooms span {
     font-size: 200%;
     color: rgb(109, 74, 23);
     margin-left: 20px;
@@ -75,7 +103,6 @@ p {
     flex-direction: column;
     gap: 15px;
     margin: 0;
-    /* padding: 5px; */
 }
 
 .canvasBox {
@@ -119,16 +146,10 @@ p {
     padding: 20px;
     gap: 15px;
     margin: 5px;
+    background-color: rgb(245, 244, 244);
 }
 
-#pdfMenu {
-    background-color: rgba(145, 115, 51, 0.226);
-    padding: 10px;
-    text-align: center;
-    min-width: 820px;
-    height: 80px;
-    color: rgb(109, 74, 23);
-}
+
 
 .a4-container {
     width: 794px;
@@ -136,9 +157,10 @@ p {
     margin: auto;
     padding: 20px;
     border: 1px solid black;
-    
+
 }
-.pdfInfoDiv{
+
+.pdfInfoDiv {
     display: flex;
     gap: 200px;
     padding: 20px;
@@ -158,4 +180,41 @@ button:hover {
     color: rgb(170, 133, 11);
     font-size: 130%;
     cursor: pointer;
+}
+
+.Projectblock{
+    background-color: rgb(245, 244, 244);
+    padding: 10px;
+    border: solid 1px #000000;
+    margin-bottom: 10px;
+}
+
+.Projectblock p{
+    font-size:xx-large;
+    margin: 5px;
+}
+
+.Projectblock:hover{
+    background-color:  rgb(231, 229, 229);
+    cursor: pointer;
+}
+
+.statistics{
+    display: grid;
+    grid-template-columns: 1fr 0.7fr 1fr 0.15fr 1fr 0.15fr;
+    /* Erstellt 3 Spalten */
+    grid-template-rows: repeat(2, auto);
+    /* Erstellt 4 Zeilen */
+    gap: 10px;
+    /* Setzt den Abstand zwischen den Grid-Items */
+    padding: 10px;
+}
+
+.statistics p {
+    background-color: rgba(102, 83, 42, 0.144);
+    font-size: larger;
+}
+
+#Dashboard {
+    min-width: 840px;
 }
