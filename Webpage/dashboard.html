@@ -19,8 +19,8 @@
     <div class="Mainmenu">
 
         <nav id="menu">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="rooms.html">Räume</a>
+            <a href="dashboard.html" style="color:beige;">Dashboard</a>
+            <a href="charts.html">Charts</a>
             <a href="createPDF.html">PDF erstellen</a>
         </nav>
 
@@ -34,11 +34,11 @@
         <label for="humMax">Feuchtigkeit max.:</label>
         <input type="number" id="humMax" maxlength="2" value="75">
 
-        <label for="pressureMax">Luftdruck max.:</label>
-        <input type="number" id="pressureMax" maxlength="4" value="1000">
+        <label for="presMax">Luftdruck max.:</label>
+        <input type="number" id="presMax" maxlength="4" value="1000">
 
         <label for="co2Max">Co2 max.:</label>
-        <input type="number" id="co2Max" maxlength="4" value="800" >
+        <input type="number" id="co2Max" maxlength="4" value="800">
 
         <label for="tempMin">Temperatur min.:</label>
         <input type="number" id="tempMin" maxlength="2" value="18">
@@ -46,8 +46,8 @@
         <label for="humMin">Feuchtigkeit min.:</label>
         <input type="number" id="humMin" maxlength="2" value="25">
 
-        <label for="pressureMin">Luftdruck min.:</label>
-        <input type="number" id="pressureMin" maxlength="4" value="800">
+        <label for="presMin">Luftdruck min.:</label>
+        <input type="number" id="presMin" maxlength="4" value="800">
 
     </div>
 
@@ -59,7 +59,7 @@
 
 
     <script>
-
+        checkAlerts('baumschulenweg');
         $.getJSON('http://localhost/ESP32/getProject.php', function (projects) {
 
             let array = projects.projects;
@@ -100,6 +100,24 @@
 
         });
 
+        function checkAlerts(project) {
+
+            const tempMax = document.getElementById("tempMax").value;
+            const tempMin = document.getElementById("tempMin").value;
+            const humMax = document.getElementById("humMax").value;
+            const humMin = document.getElementById("humMin").value;
+            const presMax = document.getElementById("presMax").value;
+            const presMin = document.getElementById("presMin").value;
+            const co2Max = document.getElementById("co2Max").value;
+
+            console.log('http://localhost/ESP32/checkAlerts.php?project=' + project + '&tempMax=' + tempMax + '&tempMin=' + tempMin + '&humMax=' + humMax + '&humMin=' + humMin + '&presMax=' + presMax + '&presMin=' + presMin + '&co2Max=' + co2Max);
+
+            $.getJSON('http://localhost/ESP32/checkAlerts.php?project=' + project + '&tempMax=' + tempMax + '&tempMin=' + tempMin + '&humMax=' + humMax + '&humMin=' + humMin + '&presMax=' + presMax + '&presMin=' + presMin + '&co2Max=' + co2Max, function (data) {
+
+                
+            });
+
+        }
 
         function capitalizeString(string) {
             return string[0].toUpperCase() + string.slice(1);
