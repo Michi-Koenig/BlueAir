@@ -254,11 +254,11 @@ FROM (
 $result = $conn->query($sql);
 
 // Ergebnis in ein Array speichern
-$data$co2Max = array();
+$dataco2Max = array();
 if ($result->num_rows > 0) {
     // Ausgabe der Daten jedes Zeile
     while($row = $result->fetch_assoc()) {
-        $data$co2Max[] = $row;
+        $dataco2Max[] = $row;
     }
 }
 //__________________________________________________________________________________
@@ -267,11 +267,18 @@ if ($result->num_rows > 0) {
 // Verbindung schließen
 $conn->close();
 
-// // Erzeuge das JSON Objekt
-// $jsonObject = array(
-//   "projects" => $resultArray
-// );
+// Erzeuge das JSON Objekt
+$jsonObject = array(
+    "projects" => $resultArray,
+    "temp-Max" => $dataTempMax,
+    "temp-Min" => $dataTempMin,
+    "hum-Max" => $dataHumMax,
+    "hum-Min" => $dataHumMin,
+    "pres-Max" => $dataPresMax,
+    "pres-Min" => $dataPresMin,
+    "co2-Max" => $dataco2Max
+);
 
 //Gib das JSON Objekt aus
-//echo json_encode($jsonObject, JSON_PRETTY_PRINT);
+echo json_encode($jsonObject, JSON_PRETTY_PRINT);
 ?>
