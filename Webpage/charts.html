@@ -197,13 +197,6 @@
 
         }
 
-        function createPDF() {
-            // get the element of ticket content.
-            const docElement = document.getElementById('charts');
-            // select the element and save as the PDF.
-            html2pdf().from(docElement).save();
-        }
-
         $(function () {
             $('#datepicker').datepicker({
                 showOtherMonths: true,
