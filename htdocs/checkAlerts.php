@@ -26,7 +26,8 @@ if ($conn->connect_error) {
 $sql = 'WITH RankedTemps AS (
     SELECT *,
            LAG(temp_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS prev_value,
-           LEAD(temp_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value
+           LEAD(temp_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value,
+           ROW_NUMBER() OVER (PARTITION BY room, device ORDER BY zeitstempel DESC) AS row_num
     FROM ' . $project . '
 ),
 Filtered AS (
@@ -39,7 +40,8 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, temp_value, room, device
+    SELECT zeitstempel, temp_value, room, device,
+            CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
 ) AS Sequences;';
@@ -47,7 +49,8 @@ FROM (
 $sql .= 'WITH RankedTemps AS (
     SELECT *,
            LAG(temp_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS prev_value,
-           LEAD(temp_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value
+           LEAD(temp_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value,
+           ROW_NUMBER() OVER (PARTITION BY room, device ORDER BY zeitstempel DESC) AS row_num
     FROM ' . $project . '
 ),
 Filtered AS (
@@ -60,7 +63,8 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, temp_value, room, device
+    SELECT zeitstempel, temp_value, room, device,
+            CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
 ) AS Sequences;';
@@ -91,7 +95,8 @@ FROM (
 $sql .= 'WITH RankedTemps AS (
     SELECT *,
            LAG(hum_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS prev_value,
-           LEAD(hum_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value
+           LEAD(hum_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value,
+           ROW_NUMBER() OVER (PARTITION BY room, device ORDER BY zeitstempel DESC) AS row_num
     FROM ' . $project . '
 ),
 Filtered AS (
@@ -104,7 +109,8 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, hum_value, room, device
+    SELECT zeitstempel, hum_value, room, device,
+            CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
 ) AS Sequences;';
@@ -112,7 +118,8 @@ FROM (
 $sql .= 'WITH RankedTemps AS (
     SELECT *,
            LAG(pres_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS prev_value,
-           LEAD(pres_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value
+           LEAD(pres_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value,
+           ROW_NUMBER() OVER (PARTITION BY room, device ORDER BY zeitstempel DESC) AS row_num
     FROM ' . $project . '
 ),
 Filtered AS (
@@ -125,7 +132,8 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, pres_value, room, device
+    SELECT zeitstempel, pres_value, room, device,
+            CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
 ) AS Sequences;';
@@ -133,7 +141,8 @@ FROM (
 $sql .= 'WITH RankedTemps AS (
     SELECT *,
            LAG(pres_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS prev_value,
-           LEAD(pres_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value
+           LEAD(pres_value) OVER (PARTITION BY room, device ORDER BY zeitstempel) AS next_value,
+           ROW_NUMBER() OVER (PARTITION BY room, device ORDER BY zeitstempel DESC) AS row_num
     FROM ' . $project . '
 ),
 Filtered AS (
@@ -146,7 +155,8 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, pres_value, room, device
+    SELECT zeitstempel, pres_value, room, device,
+            CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
 ) AS Sequences;';
