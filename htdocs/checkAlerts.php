@@ -40,7 +40,7 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, temp_value, room, device,
+    SELECT Date(zeitstempel),Time(zeitstempel), room, device, temp_value, hum_value, pres_value, co2_value,
             CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
@@ -63,7 +63,7 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, temp_value, room, device,
+    SELECT Date(zeitstempel),Time(zeitstempel), room, device, temp_value, hum_value, pres_value, co2_value,
             CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
@@ -86,7 +86,7 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, hum_value, room, device,
+    SELECT Date(zeitstempel),Time(zeitstempel), room, device, temp_value, hum_value, pres_value, co2_value,
            CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
@@ -109,7 +109,7 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, hum_value, room, device,
+    SELECT Date(zeitstempel),Time(zeitstempel), room, device, temp_value, hum_value, pres_value, co2_value,
             CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
@@ -132,7 +132,7 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, pres_value, room, device,
+    SELECT Date(zeitstempel),Time(zeitstempel), room, device, temp_value, hum_value, pres_value, co2_value,
             CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
@@ -155,7 +155,7 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, pres_value, room, device,
+    SELECT Date(zeitstempel),Time(zeitstempel), room, device, temp_value, hum_value, pres_value, co2_value,
             CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1
@@ -178,7 +178,7 @@ Filtered AS (
 )
 SELECT *
 FROM (
-    SELECT zeitstempel, co2_value, room, device,
+    SELECT Date(zeitstempel),Time(zeitstempel), room, device, temp_value, hum_value, pres_value, co2_value,
            CASE WHEN row_num = 1 THEN 1 ELSE 0 END AS is_last_record
     FROM Filtered
     WHERE is_high = 1

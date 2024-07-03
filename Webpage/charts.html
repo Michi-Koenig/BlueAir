@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
     <link rel="stylesheet" href="styles.css">
-    
+
 </head>
 
 
@@ -40,13 +40,13 @@
             <option value="month">Monat</option>
         </select>
         Datum: <input type="text" id="datepicker" class="Dropdown">
-        <br/><br/>
+        <br /><br />
         <span id="project"></span>
         <span id="room"></span>
 
     </div>
 
-    <hr>
+    <hr class="hrHorizontal">
 
     <div class="Rooms">
 
@@ -54,10 +54,12 @@
             <p>Räume</p>
         </div>
 
+        <hr class="hrVertikal">
+        
         <div class="charts" , id="charts">
-            
 
         </div>
+        
     </div>
 
     <script>
@@ -114,7 +116,7 @@
             let DataPath = "http://localhost/ESP32/getData.php?project=" + selectElement + "&room=" + room + "&typeOfTime=" + selectTypeOfTime + "&timeperiod=" + dateString;
 
             let chartdiv = document.getElementById("charts");
-            chartdiv.innerHTML = "";         
+            chartdiv.innerHTML = "";
 
             $.getJSON(DataPath, function (data) {
 
@@ -122,6 +124,7 @@
                 document.getElementById('project').innerText = "Projekt: " + data.project;
                 document.getElementById('room').innerText = "Raum: " + capitalizeString(data.room);
 
+                let linenames = ["Temperatur [°C]", "Rel. Luftfeuchtigkeit [%]", "Luftdruck [hPa]", "Co2-Konzentration [ppm]"]
                 //let countDevice = 1;
                 let countChart = 1;
 
@@ -150,12 +153,13 @@
 
                         let chartMin = minValue(dataValues[countChart - 1]);
                         let chartMax = maxValue(dataValues[countChart - 1]);
-                    
+
                         new Chart('chart' + countChart, {
                             type: 'line',
                             data: {
                                 labels: data.time,
                                 datasets: [{
+                                    label: linenames[countChart - 1],
                                     fill: false,
                                     lineTension: 0,
                                     backgroundColor: 'rgba(138, 92, 32, 1.0)',
@@ -164,9 +168,16 @@
                                 }]
                             },
                             options: {
-                                legend: { display: true },
-                                scales: {
-                                    yAxes: [{ ticks: { min: chartMin, max: chartMax } }]
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    labels: {
+                                        color: 'schwarz',
+                                        font: {
+                                            size: 16,
+                                            weight: 'bold'
+                                        }
+                                    }
                                 }
                             }
                         });
@@ -214,7 +225,7 @@
             // beim ersten öffnen der Seite wird das heutige Datum selectiert
             $('#datepicker').datepicker('setDate', new Date());
             var date = $('#datepicker').datepicker('getDate');
-        
+
         });
 
         function capitalizeString(string) {

@@ -88,6 +88,7 @@
                     const alertlist = document.createElement('div');
                     alertlist.id = 'alertlist' + project;
                     alertlist.className = 'alertlist';
+                    alertlist.style.display = 'none';
                     projectblock.appendChild(alertlist);
 
                     checkAlerts(project, function (alerts) {
@@ -146,7 +147,7 @@
                     });
                 });
 
-                document.getElementById('alertlist'+ project).appendChild(createAlertlistDiv(combinedArray));
+                document.getElementById('alertlist' + project).appendChild(createAlertlistDiv(project, combinedArray));
                 // Rufe die Callback-Funktion mit den Ergebnissen auf
                 callbackFunktion({ 'alerts': numberOfAlerts.toString(), 'aktivAlerts': aktivAlerts.toString() });
             });
@@ -157,18 +158,17 @@
             return string[0].toUpperCase() + string.slice(1);
         }
 
-        function createAlertlistDiv(existingTableData) {
-            
+        function createAlertlistDiv(project, existingTableData) {
+
 
             // Erstelle die Tabelle
             const table = document.createElement('table');
-            table.style.width = '100%';
-            table.style.borderCollapse = 'collapse';
+            table.className = 'alerttable';
 
             // Erstelle die Tabellenüberschriften (thead)
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
-            const headers = ["Datum", "Zeit", "Raum", "Gerät", "Temp.", "Feuchte", "Druck", "CO2"];
+            const headers = ["Datum", "Zeit", "Raum", "Gerät", "Temperatur [°C]", "Rel. Luftfeuchte [%]", "Luftdruck [hPa]", "CO2 [ppm]", "Alarm aktiv"];
             headers.forEach(headerText => {
                 const th = document.createElement('th');
                 th.textContent = headerText;
@@ -179,6 +179,7 @@
 
             // Befülle die Tabelle mit vorhandenen Daten
             const tbody = document.createElement('tbody');
+            tbody.id = 'tbody'+ project;
 
             existingTableData.forEach(data => {
                 const row = document.createElement('tr');
@@ -189,13 +190,60 @@
                 }
                 tbody.appendChild(row);
             });
-            table.appendChild(tbody);
 
+            table.appendChild(tbody);
+            
             return table;
         }
 
         function showDetails(project) {
+
+            let alertlist = document.getElementById('alertlist' + project);
+            alertlist.style.display = alertlist.style.display === 'none' ? 'block' : 'none';
+
+            const tempMax = document.getElementById("tempMax").value;
+            const tempMin = document.getElementById("tempMin").value;
+            const humMax = document.getElementById("humMax").value;
+            const humMin = document.getElementById("humMin").value;
+            const presMax = document.getElementById("presMax").value;
+            const presMin = document.getElementById("presMin").value;
+            const co2Max = document.getElementById("co2Max").value;
+
+            let table = document.getElementById('tbody' + project);
+            for (const row of table.rows) {
+
+                const tempCell = row.cells[4];
+                const tempValue = parseFloat(tempCell.textContent);
+                if (tempValue > tempMax) {
+                    row.cells[4].classList.add('high-value-column');
+                } else if (tempValue < tempMin) {
+                    row.cells[4].classList.add('low-value-column');
+                }
+
+                const humCell = row.cells[5];
+                const humValue = parseFloat(humCell.textContent);
+                if (humValue > humMax) {
+                    row.cells[5].classList.add('high-value-column');
+                } else if (humValue < humMin) {
+                    row.cells[5].classList.add('low-value-column');
+                }
+
+                const presCell = row.cells[6];
+                const presValue = parseFloat(presCell.textContent);
+                if (presValue > presMax) {
+                    row.cells[6].classList.add('high-value-column');
+                } else if (presValue < presMin) {
+                    row.cells[6].classList.add('low-value-column');
+                }
+
+                const co2Cell = row.cells[7];
+                const co2Value = parseFloat(co2Cell.textContent);
+                if (co2Value > co2Max) {
+                    row.cells[7].classList.add('high-value-column');
+                }
+            }
         }
+
     </script>
 
 

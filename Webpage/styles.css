@@ -6,6 +6,22 @@ p {
     color: rgb(59, 46, 30);
 }
 
+#logo {
+    max-height: 3%;
+}
+
+.hrVertikal {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+select,
+input {
+    background-color: rgba(145, 115, 51, 0.226);
+    border-radius: 3px;
+    border: 1px solid black;
+}
+
 .Mainmenu a {
     text-decoration: none;
     color: rgb(78, 53, 16);
@@ -27,16 +43,15 @@ p {
     margin-bottom: 5px;
     text-align: center;
     min-width: 820px;
+    border-radius: 5px;
 }
 
 .Rooms {
     background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: row;
-    padding: 5px;
     gap: 5px;
-    height: auto;
-    min-height: 100%;
+    height:auto;
     min-width: 820px;
 }
 
@@ -46,20 +61,20 @@ p {
     flex-direction: column;
     flex-wrap: wrap;
     padding: 10px;
-    border-right: 1px solid;
     border-color: black;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    border-radius: 5px;
     width: 15%;
 }
 
-.SitemenuRooms, .SitemenuPDF {
+.SitemenuRooms,
+.SitemenuPDF {
     background-color: rgba(145, 115, 51, 0.226);
     padding: 10px;
     text-align: center;
     min-width: 820px;
     height: 80px;
-    color: rgb(109, 74, 23)
+    color: rgb(109, 74, 23);
+    border-radius: 5px;
 }
 
 .SitemenuDashboard {
@@ -75,7 +90,8 @@ p {
     padding: 10px;
     min-width: 820px;
     height: 80px;
-    color: rgb(109, 74, 23)
+    color: rgb(109, 74, 23);
+    border-radius: 5px;
 }
 
 .SitemenuDashboard label {
@@ -94,6 +110,7 @@ p {
     color: rgb(109, 74, 23);
     margin-left: 20px;
     margin-right: 20px;
+    border-radius: 5px;
 }
 
 .charts {
@@ -113,7 +130,7 @@ p {
     gap: 10px;
     height: auto;
     padding: 10px;
-    margin: 5px;
+    border-radius: 5px;
 }
 
 .canvasDivRooms {
@@ -123,8 +140,8 @@ p {
 }
 
 .canvasDivPDF {
-    width: 60%;
-    height: auto;
+    width: 55%;
+    height: 20%;
     min-width: 400px;
     margin: 5px;
 }
@@ -147,6 +164,9 @@ p {
     gap: 15px;
     margin: 5px;
     background-color: rgb(245, 244, 244);
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
 }
 
 
@@ -157,6 +177,7 @@ p {
     margin: auto;
     padding: 20px;
     border: 1px solid black;
+    background-color: white;
 
 }
 
@@ -166,10 +187,7 @@ p {
     padding: 20px;
     margin: 0px;
     background-color: rgba(145, 115, 51, 0.226);
-}
-
-button:hover {
-    color: green;
+    border-radius: 10px;
 }
 
 .roomSelect {
@@ -182,24 +200,25 @@ button:hover {
     cursor: pointer;
 }
 
-.Projectblock{
+.Projectblock {
     background-color: rgb(245, 244, 244);
     padding: 10px;
     border: solid 1px #000000;
+    border-radius: 5px;
     margin-bottom: 10px;
 }
 
-.Projectblock p{
-    font-size:xx-large;
+.Projectblock p {
+    font-size: xx-large;
     margin: 5px;
 }
 
-.Projectblock:hover{
-    background-color:  rgb(231, 229, 229);
+.Projectblock:hover {
+    background-color: rgb(231, 229, 229);
     cursor: pointer;
 }
 
-.statistics{
+.statistics {
     display: grid;
     grid-template-columns: 1fr 0.7fr 1fr 0.15fr 1fr 0.15fr;
     /* Erstellt 3 Spalten */
@@ -217,4 +236,29 @@ button:hover {
 
 #Dashboard {
     min-width: 840px;
+}
+
+.alertlist {
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 5px;
+}
+
+.alerttable {
+    width: 100%;
+    border-collapse: separate;
+}
+th,
+td {
+    border-left: 1px solid rgb(0, 0, 0);
+    border-bottom: 1px solid rgb(0, 0, 0);
+    border-radius: 3px;
+}
+
+.high-value-column {
+    background-color: rgba(255, 0, 0, 0.408);
+    
+}
+
+.low-value-column {
+    background-color: rgba(255, 167, 4, 0.623);
 }
