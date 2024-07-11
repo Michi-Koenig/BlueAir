@@ -63,7 +63,7 @@
     </div>
 
     <script>
-
+        
         let numberOfDevices; // wird von der funktion renderPDF überschrieben und in der funktion createPDF verwendet
 
         $.getJSON('http://localhost/ESP32/getProject.php', function (projects) {
@@ -125,8 +125,6 @@
             $.getJSON(DataPath, function (data) {
 
                 numberOfDevices = data.devices;
-                console.log(numberOfDevices);
-                console.log(data);
                 let countDevice = 1;
                 let countChart = 1;
 
@@ -143,15 +141,25 @@
                     const typeOfTime = translateEN_DE(document.getElementById('typeOfTime').value);
                     const date = document.getElementById('datepicker').value;
 
-                    const logo = document.createElement('img');
-                    logo.src = 'logo.png';
-                    logo.id = 'logo';
+                    // const headerRow = document.createElement('div');
+                    // headerRow.className = 'headerRow';
+
+                    // const logo = document.createElement('img');
+                    // logo.src = 'logo.png';
+                    // logo.id = 'logo';
+
+                    // const BlueAriMonitor = document.createElement('p');
+                    // BlueAriMonitor.innerHTML = 'BlueAirMonitor';
+                    // BlueAriMonitor.id = 'logoTEXT';
                     
+                    // headerRow.appendChild(logo);
+                    // headerRow.appendChild(BlueAriMonitor);
+
+                    // divSite.appendChild(headerRow);
+
                     const pdfInfoDiv = document.createElement('div');
                     pdfInfoDiv.id = 'pdfInfoDiv' + countDevice;
                     pdfInfoDiv.className = 'pdfInfoDiv'
-
-                    divSite.appendChild(logo);
                     divSite.appendChild(pdfInfoDiv);
                     
                     const pdfInfo1 = document.createElement('p');
