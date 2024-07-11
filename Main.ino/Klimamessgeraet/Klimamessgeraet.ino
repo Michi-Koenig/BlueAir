@@ -10,8 +10,6 @@ Adafruit_BME280 bme; // I2C Objekterstellung
 BluetoothSerial SerialBT;  // Bluetoothverbindung Objekterstellung
 Preferences appData;
 
-//const char WIFI_SSID[] = "UPC2128142";
-//const char WIFI_PASSWORD[] = "Koenig-2022";
 
 String HOST_NAME = "http://192.168.0.241"; // change to your PC's IP address
 String PATH_NAME   = "/ESP32/insert_temp.php";

@@ -29,25 +29,25 @@
     <div class="SitemenuDashboard">
 
         <label for="tempMax">Temperatur max.:</label>
-        <input type="number" id="tempMax" maxlength="2" value="25">
+        <input type="number" id="tempMax" maxlength="2" value="25" onchange="renderDashboard()">
 
         <label for="humMax">Feuchtigkeit max.:</label>
-        <input type="number" id="humMax" maxlength="2" value="60">
+        <input type="number" id="humMax" maxlength="2" value="60" onchange="renderDashboard()">
 
         <label for="presMax">Luftdruck max.:</label>
-        <input type="number" id="presMax" maxlength="4" value="990">
+        <input type="number" id="presMax" maxlength="4" value="990" onchange="renderDashboard()">
 
         <label for="co2Max">Co2 max.:</label>
-        <input type="number" id="co2Max" maxlength="4" value="598">
+        <input type="number" id="co2Max" maxlength="4" value="598" onchange="renderDashboard()">
 
         <label for="tempMin">Temperatur min.:</label>
-        <input type="number" id="tempMin" maxlength="2" value="14">
+        <input type="number" id="tempMin" maxlength="2" value="14" onchange="renderDashboard()">
 
         <label for="humMin">Feuchtigkeit min.:</label>
-        <input type="number" id="humMin" maxlength="2" value="35">
+        <input type="number" id="humMin" maxlength="2" value="35" onchange="renderDashboard()">
 
         <label for="presMin">Luftdruck min.:</label>
-        <input type="number" id="presMin" maxlength="4" value="850">
+        <input type="number" id="presMin" maxlength="4" value="850" onchange="renderDashboard()">
 
     </div>
 
@@ -60,44 +60,61 @@
 
     <script>
 
-        $.getJSON('http://localhost/ESP32/getProject.php', function (projects) {
-            let array = projects.projects;
-            let selectElement = document.getElementById('selectProject');
+        renderDashboard();
 
-            array.forEach(function (project) {
-                const projectblock = document.createElement('div');
-                projectblock.className = 'Projectblock';
-                projectblock.onclick = function () { showDetails(project); };
-                document.getElementById('Dashboard').appendChild(projectblock);
+        function renderDashboard() {
 
-                const p = document.createElement('p');
-                p.textContent = capitalizeString(project);
-                projectblock.appendChild(p);
+            let dashboard = document.getElementById("Dashboard");
+            dashboard.innerHTML = "";
 
-                const statistics = document.createElement('div');
-                statistics.className = 'statistics';
-                projectblock.appendChild(statistics);
+            $.getJSON('http://localhost/ESP32/getProject.php', function (projects) {
+                let array = projects.projects;
+                let selectElement = document.getElementById('selectProject');
 
-                checkAlerts(project, function (alerts) {
-                    let values = ['Erste Messung:', '', 'Anzahl Räume:', '', 'aktive Alarme:', alerts.aktivAlerts, 'Letzte Messung:', '', 'Anzahl Geräte:', '', 'Alarme gesamt:', alerts.alerts];
+                array.forEach(function (project) {
+                    const projectblock = document.createElement('div');
+                    projectblock.className = 'Projectblock';
+                    projectblock.onclick = function () { showDetails(project); };
+                    document.getElementById('Dashboard').appendChild(projectblock);
 
-                    $.getJSON('http://localhost/ESP32/getStatistics.php?project=' + project, function (data) {
-                        values[1] = data.oldTimestamp;
-                        values[3] = data.rooms;
-                        values[7] = data.newTimestamp;
-                        values[9] = data.devices;
+                    const p = document.createElement('p');
+                    p.textContent = capitalizeString(project);
+                    projectblock.appendChild(p);
 
-                        values.forEach(text => {
-                            const p = document.createElement('p');
-                            p.textContent = text;
-                            statistics.appendChild(p);
+                    const statistics = document.createElement('div');
+                    statistics.className = 'statistics';
+                    projectblock.appendChild(statistics);
+
+                    const alertlist = document.createElement('div');
+                    alertlist.id = 'alertlist' + project;
+                    alertlist.className = 'alertlist';
+                    alertlist.style.display = 'none';
+                    projectblock.appendChild(alertlist);
+
+                    checkAlerts(project, function (alerts) {
+                        let values = ['Erste Messung:', '', 'Anzahl Räume:', '', 'aktive Alarme:', alerts.aktivAlerts, 'Letzte Messung:', '', 'Anzahl Geräte:', '', 'Alarme gesamt:', alerts.alerts];
+
+                        $.getJSON('http://localhost/ESP32/getStatistics.php?project=' + project, function (data) {
+                            values[1] = data.oldTimestamp;
+                            values[3] = data.rooms;
+                            values[7] = data.newTimestamp;
+                            values[9] = data.devices;
+
+                            values.forEach(text => {
+                                const p = document.createElement('p');
+                                p.textContent = text;
+                                statistics.appendChild(p);
+                            });
+
+
                         });
                     });
                 });
             });
-        });
 
-        function checkAlerts(project, callback) {
+        };
+
+        function checkAlerts(project, callbackFunktion) {
 
             const tempMax = document.getElementById("tempMax").value;
             const tempMin = document.getElementById("tempMin").value;
@@ -117,6 +134,7 @@
                 let arrayCo2Max = data.co2Max;
 
                 let dataArray = [arrayTempMax, arrayTempMin, arrayHumMax, arrayHumMin, arrayPresMax, arrayPresMin, arrayCo2Max];
+                const combinedArray = [...arrayTempMax, ...arrayTempMin, ...arrayHumMax, ...arrayHumMin, ...arrayPresMax, ...arrayPresMin, ...arrayCo2Max];
 
                 let numberOfAlerts = arrayTempMax.length + arrayTempMin.length + arrayHumMax.length + arrayHumMin.length + arrayPresMax.length + arrayPresMin.length + arrayCo2Max.length;
                 let aktivAlerts = 0;
@@ -129,20 +147,103 @@
                     });
                 });
 
+                document.getElementById('alertlist' + project).appendChild(createAlertlistDiv(project, combinedArray));
                 // Rufe die Callback-Funktion mit den Ergebnissen auf
-                callback({ 'alerts': numberOfAlerts.toString(), 'aktivAlerts': aktivAlerts.toString() });
+                callbackFunktion({ 'alerts': numberOfAlerts.toString(), 'aktivAlerts': aktivAlerts.toString() });
             });
+
         }
 
         function capitalizeString(string) {
             return string[0].toUpperCase() + string.slice(1);
         }
 
-        function showDetails(project) {
-            alert('Details');
+        function createAlertlistDiv(project, existingTableData) {
+
+
+            // Erstelle die Tabelle
+            const table = document.createElement('table');
+            table.className = 'alerttable';
+
+            // Erstelle die Tabellenüberschriften (thead)
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            const headers = ["Datum", "Zeit", "Raum", "Gerät", "Temperatur [°C]", "Rel. Luftfeuchte [%]", "Luftdruck [hPa]", "CO2 [ppm]", "Alarm aktiv"];
+            headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Befülle die Tabelle mit vorhandenen Daten
+            const tbody = document.createElement('tbody');
+            tbody.id = 'tbody'+ project;
+
+            existingTableData.forEach(data => {
+                const row = document.createElement('tr');
+                for (const key in data) {
+                    const cell = document.createElement('td');
+                    cell.textContent = data[key];
+                    row.appendChild(cell);
+                }
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(tbody);
+            
+            return table;
         }
 
-       
+        function showDetails(project) {
+
+            let alertlist = document.getElementById('alertlist' + project);
+            alertlist.style.display = alertlist.style.display === 'none' ? 'block' : 'none';
+
+            const tempMax = document.getElementById("tempMax").value;
+            const tempMin = document.getElementById("tempMin").value;
+            const humMax = document.getElementById("humMax").value;
+            const humMin = document.getElementById("humMin").value;
+            const presMax = document.getElementById("presMax").value;
+            const presMin = document.getElementById("presMin").value;
+            const co2Max = document.getElementById("co2Max").value;
+
+            let table = document.getElementById('tbody' + project);
+            for (const row of table.rows) {
+
+                const tempCell = row.cells[4];
+                const tempValue = parseFloat(tempCell.textContent);
+                if (tempValue > tempMax) {
+                    row.cells[4].classList.add('high-value-column');
+                } else if (tempValue < tempMin) {
+                    row.cells[4].classList.add('low-value-column');
+                }
+
+                const humCell = row.cells[5];
+                const humValue = parseFloat(humCell.textContent);
+                if (humValue > humMax) {
+                    row.cells[5].classList.add('high-value-column');
+                } else if (humValue < humMin) {
+                    row.cells[5].classList.add('low-value-column');
+                }
+
+                const presCell = row.cells[6];
+                const presValue = parseFloat(presCell.textContent);
+                if (presValue > presMax) {
+                    row.cells[6].classList.add('high-value-column');
+                } else if (presValue < presMin) {
+                    row.cells[6].classList.add('low-value-column');
+                }
+
+                const co2Cell = row.cells[7];
+                const co2Value = parseFloat(co2Cell.textContent);
+                if (co2Value > co2Max) {
+                    row.cells[7].classList.add('high-value-column');
+                }
+            }
+        }
+
     </script>
 
 

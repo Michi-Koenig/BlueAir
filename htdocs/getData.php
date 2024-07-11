@@ -53,11 +53,12 @@ if ($typOfTime == "day"){
         $arraypres = array();
         $arrayco2 = array();
         
+        // Für die vollständige Arraylänge zuerst alles mit 'null' befüllen
         for ($j = 1; $j <= 12; $j++) {
-            array_push($arraytemp, 0);
-            array_push($arrayhum, 0);
-            array_push($arraypres, 0);
-            array_push($arrayco2, 0);
+            array_push($arraytemp, null);
+            array_push($arrayhum, null);
+            array_push($arraypres, null);
+            array_push($arrayco2, null);
         }
 
         //Daten von jedem Datensatz in das jeweilige Array speichern
@@ -108,12 +109,12 @@ if ($typOfTime == "day"){
         $arraypres = array();
         $arrayco2 = array();
 
-        // erstellen der Arrays für die vier Charts
+        // Für die vollständige Arraylänge zuerst alles mit 'null' befüllen
         for ($j = 1; $j <= 7; $j++) {
-            array_push($arraytemp, 0);
-            array_push($arrayhum, 0);
-            array_push($arraypres, 0);
-            array_push($arrayco2, 0);
+            array_push($arraytemp, null);
+            array_push($arrayhum, null);
+            array_push($arraypres, null);
+            array_push($arrayco2, null);
         }
 
         //Daten von jedem Datensatz in das jeweilige Array speichern
@@ -163,7 +164,7 @@ if ($typOfTime == "day"){
         $arraypres = array();
         $arrayco2 = array();
 
-        // erstellen der Arrays für die vier Charts
+        // Für die vollständige Arraylänge zuerst alles mit 'null' befüllen
         for ($j = 1; $j <= $numDays; $j++) {
             array_push($arraytemp, null);
             array_push($arrayhum, null);
@@ -177,10 +178,10 @@ if ($typOfTime == "day"){
             
             while($row = $resultmonth->fetch_assoc()) {
                 
-                $arraytemp[$row["day"]] = number_format($row["avg_temperature"],1);
-                $arrayhum[$row["day"]] = number_format($row["avg_humidity"]);
-                $arraypres[$row["day"]] = number_format($row["avg_pressure"]);
-                $arrayco2[$row["day"]] = number_format($row["avg_co2"]);
+                $arraytemp[$row["day"]-1] = number_format($row["avg_temperature"],1);
+                $arrayhum[$row["day"]-1] = number_format($row["avg_humidity"]);
+                $arraypres[$row["day"]-1] = number_format($row["avg_pressure"]);
+                $arrayco2[$row["day"]-1] = number_format($row["avg_co2"]);
             }
         }
 
@@ -222,7 +223,7 @@ function averageValue($array){
     }
 
     return $averageArray;
-    
+
 }
 
 ?>

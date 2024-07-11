@@ -59,6 +59,7 @@
 
     <div class="pdfViewer" , id="pdfViewer">
 
+<<<<<<< HEAD
         <div class="charts" , id="charts">
             
 
@@ -67,6 +68,13 @@
 
     <script>
         // das ist ein Testkommentar
+=======
+       
+    </div>
+
+    <script>
+        
+>>>>>>> b2ca1f35f31f859621bce43ccc142325aa1b3836
         let numberOfDevices; // wird von der funktion renderPDF überschrieben und in der funktion createPDF verwendet
 
         $.getJSON('http://localhost/ESP32/getProject.php', function (projects) {
@@ -122,17 +130,17 @@
             let dateString = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
             let DataPath = "http://localhost/ESP32/getData.php?project=" + selectProject + "&room=" + selectRoom + "&typeOfTime=" + selectTypeOfTime + "&timeperiod=" + dateString;
 
-            let chartdiv = document.getElementById("charts");
+            let chartdiv = document.getElementById("pdfViewer");
             chartdiv.innerHTML = "";
 
             $.getJSON(DataPath, function (data) {
 
                 numberOfDevices = data.devices;
-                console.log(numberOfDevices);
-                console.log(data);
                 let countDevice = 1;
                 let countChart = 1;
 
+                let linenames = ["Temperatur [°C]", "Rel. Luftfeuchtigkeit [%]", "Luftdruck [hPa]", "Co2-Konzentration [ppm]"]
+               
                 var dataValues = data.data;
                 var xAxis;
 
@@ -141,15 +149,30 @@
                     divSite.id = 'divSite'+ countDevice;
                     divSite.className = 'a4-container';
 
-
                     const typeOfTime = translateEN_DE(document.getElementById('typeOfTime').value);
                     const date = document.getElementById('datepicker').value;
+
+                    // const headerRow = document.createElement('div');
+                    // headerRow.className = 'headerRow';
+
+                    // const logo = document.createElement('img');
+                    // logo.src = 'logo.png';
+                    // logo.id = 'logo';
+
+                    // const BlueAriMonitor = document.createElement('p');
+                    // BlueAriMonitor.innerHTML = 'BlueAirMonitor';
+                    // BlueAriMonitor.id = 'logoTEXT';
+                    
+                    // headerRow.appendChild(logo);
+                    // headerRow.appendChild(BlueAriMonitor);
+
+                    // divSite.appendChild(headerRow);
 
                     const pdfInfoDiv = document.createElement('div');
                     pdfInfoDiv.id = 'pdfInfoDiv' + countDevice;
                     pdfInfoDiv.className = 'pdfInfoDiv'
                     divSite.appendChild(pdfInfoDiv);
-
+                    
                     const pdfInfo1 = document.createElement('p');
                     pdfInfo1.id = 'pdfInfo1-' + countDevice;
                     pdfInfo1.className = 'pdfInfo1'
@@ -180,7 +203,7 @@
                         divChild.appendChild(canvas);
 
                         
-                        document.getElementById('charts').appendChild(divSite);
+                        document.getElementById('pdfViewer').appendChild(divSite);
                         
                         xAxis = dataValues[countChart - 1];
 
@@ -192,6 +215,7 @@
                             data: {
                                 labels: data.time,
                                 datasets: [{
+                                    label: linenames[countChart - 1],
                                     fill: false,
                                     lineTension: 0,
                                     backgroundColor: 'rgba(138, 92, 32, 1.0)',
@@ -200,10 +224,20 @@
                                 }]
                             },
                             options: {
-                                legend: { display: true },
-                                scales: {
-                                    yAxes: [{ ticks: { min: chartMin, max: chartMax } }]
-                                }
+                                legend: {
+                                    display: true, 
+                                    position: 'top', 
+                                    labels: { 
+                                        color: 'schwarz', 
+                                        font: { 
+                                            size: 16,
+                                            weight: 'bold'
+                                        }
+                                    }
+                                },
+                                // scales: {
+                                //     yAxes: [{ ticks: { min: chartMin, max: chartMax } }]
+                                // }
                             }
                         });
 

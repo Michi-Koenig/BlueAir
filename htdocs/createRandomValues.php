@@ -1,8 +1,8 @@
 <?php
 // Verbindung zur Datenbank herstellen (ersetze die Platzhalter mit deinen eigenen Daten)
 $servername = "localhost:3306";
-$username = "mysql";
-$password = "root"
+$username = "root";
+$password = "";
 $dbname = "airmonitoring";
 
 // Verbindung aufbauen
@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // Tabelle erstellen, falls sie noch nicht existiert
-$sql = "CREATE TABLE IF NOT EXISTS Rathaus (
+$sql = "CREATE TABLE IF NOT EXISTS Bahnhofweg (
     zeitstempel TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ID INT NOT NULL AUTO_INCREMENT,
     temp_value FLOAT NOT NULL,
@@ -33,20 +33,20 @@ if ($conn->query($sql) === TRUE) {
 }
 
 // Zufällige Messdaten generieren und in die Tabelle einfügen
-for ($i = 0; $i < 20000; $i++) {
+for ($i = 0; $i < 9550; $i++) {
     $minutes = $i*5;
     $zeitstempel = date("Y-m-d H:i:s", strtotime("+ ".$minutes." minutes"));
     $temp = rand(15, 25); 
     $hum = rand(35, 60); 
     $pres = rand(956, 987); 
     $co2 = rand(200, 600);
-    $room = "Besprechung 1";
+    $room = "Bad";
     $device = 1;
 
-    $sql = "INSERT INTO whiteHouse (zeitstempel, temp_value, hum_value, pres_value, co2_value, room, device) VALUES ('$zeitstempel', $temp, $hum, $pres, $co2, '$room', $device )";
+    $sql = "INSERT INTO bahnhofweg (zeitstempel, temp_value, hum_value, pres_value, co2_value, room, device) VALUES ('$zeitstempel', $temp, $hum, $pres, $co2, '$room', $device )";
 
     if ($conn->query($sql) === TRUE) {
-        //echo "Datensatz eingefügt: Zeitstempel = $zeitstempel, Temperatur = $temp<br>";
+        echo "Datensatz eingefügt: Zeitstempel = $zeitstempel, Temperatur = $temp<br>";
     } else {
         echo "Fehler beim Einfügen des Datensatzes: " . $conn->error;
     }
