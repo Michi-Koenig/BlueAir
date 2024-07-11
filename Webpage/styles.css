@@ -3,13 +3,19 @@ body {
 }
 
 p {
-    color: rgb(59, 46, 30);
+    color: #3b2e1e;
+    font-size: ;
 }
 
 #logo {
-    max-height: 3%;
+    max-height: 65%;
 }
 
+#logoTEXT {
+    color: rgb(053, 139, 185);
+    font-size: 2rem;
+    margin: 0;
+}
 .hrVertikal {
     margin-top: 0;
     margin-bottom: 0;
@@ -169,7 +175,11 @@ input {
     border-radius: 5px;
 }
 
-
+.headerRow {
+    display: flex;
+    flex-direction: row;
+    height: 5%;
+}
 
 .a4-container {
     width: 794px;
